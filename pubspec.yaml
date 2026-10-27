@@ -1,5 +1,6 @@
+
 name: voucher_master
-description: "voucher vaster for ruijie gateway"
+description: "Voucher Master for Ruijie Gateway"
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -9,6 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
   blue_thermal_printer: ^1.2.3
   shared_preferences: ^2.2.2
   http: ^1.1.0
@@ -20,4 +22,4 @@ dev_dependencies:
   flutter_lints: ^3.0.0
 
 flutter:
-  uses_material_design: true
+  uses-material-design: true
