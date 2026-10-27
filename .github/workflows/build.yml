@@ -1,4 +1,4 @@
-name: Build Voucher Master APK
+name: build_voucher_master_apk
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu_latest
 
     steps:
       - uses: actions/checkout@v4
@@ -18,7 +18,7 @@ jobs:
           java-version: '17'
 
       - name: Set up Flutter
-        uses: subosito/flutter-action@v2
+        uses: subosito/flutter_action@v2
         with:
           flutter-version: '3.19.x'
           channel: 'stable'
@@ -35,5 +35,5 @@ jobs:
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: voucher-master-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+          name: voucher_master_apk
+          path: build/app/outputs/flutter_apk/app_release.apk
