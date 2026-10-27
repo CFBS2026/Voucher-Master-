@@ -32,24 +32,22 @@ jobs:
           channel: stable
           cache: true
 
-      - name: Check Project Files
+      - name: Validate Flutter Project
         run: |
-          if [ ! -f pubspec.yaml ]; then
-            echo "ERROR: pubspec.yaml not found in repository root."
-            exit 1
-          fi
+          test -f pubspec.yaml
+          grep -q '^name: voucher_master$' pubspec.yaml
 
       - name: Generate Android Project if Missing
         run: |
           if [ ! -d android ]; then
-            flutter create . --platforms=android
+            flutter create --project-name voucher_master --platforms=android .
           fi
 
       - name: Install Dependencies
         run: flutter pub get
 
-      - name: Check Flutter
-        run: flutter doctor
+      - name: Check Dart Files
+        run: flutter analyze
 
       - name: Build Release APK
         run: flutter build apk --release
