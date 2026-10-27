@@ -1,4 +1,4 @@
-Name: Build Voucher Master APK
+name: Build Voucher Master APK
 
 on:
   push:
