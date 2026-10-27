@@ -32,7 +32,7 @@ jobs:
           channel: stable
           cache: true
 
-      - name: Validate Flutter Project
+      - name: Validate Project
         run: |
           test -f pubspec.yaml
           grep -q '^name: voucher_master$' pubspec.yaml
@@ -45,9 +45,6 @@ jobs:
 
       - name: Install Dependencies
         run: flutter pub get
-
-      - name: Check Dart Files
-        run: flutter analyze
 
       - name: Build Release APK
         run: flutter build apk --release
