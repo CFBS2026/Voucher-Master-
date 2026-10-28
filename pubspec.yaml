@@ -18,8 +18,8 @@ dependencies:
   sqflite: ^2.3.2
   path_provider: ^2.1.2
 
-  # Bluetooth Thermal Printer (စလစ်ထုတ်ရန်)
-  blue_thermal_printer: ^1.2.4
+  # Bluetooth Thermal Printer (စလစ်ထုတ်ရန်) - Version Error ဖြေရှင်းပြီး
+  blue_thermal_printer: ^1.2.3
   esc_pos_utils_plus: ^2.0.2
 
   # UI လှပစေရန်နှင့် Icons များအတွက်
