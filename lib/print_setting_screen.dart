@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:blue_thermal_printer/blue_thermal_printer.dart';
-import 'services/printer_service.dart';
+import 'printer_service.dart';
 
 class PrintSettingScreen extends StatefulWidget {
   const PrintSettingScreen({Key? key}) : super(key: key);
@@ -11,6 +11,8 @@ class PrintSettingScreen extends StatefulWidget {
 
 class _PrintSettingScreenState extends State<PrintSettingScreen> {
   final PrinterService _printerService = PrinterService();
+  BlueThermalPrinter bluetooth = BlueThermalPrinter.instance;
+  
   List<BluetoothDevice> _devices = [];
   BluetoothDevice? _selectedDevice;
   bool _isConnected = false;
@@ -18,14 +20,39 @@ class _PrintSettingScreenState extends State<PrintSettingScreen> {
   @override
   void initState() {
     super.initState();
-    _loadDevices();
+    _initBluetooth();
   }
 
-  void _loadDevices() async {
-    List<BluetoothDevice> devices = await _printerService.getPairedDevices();
+  void _initBluetooth() async {
+    bool? isConnected = await bluetooth.isConnected;
+    List<BluetoothDevice> devices = [];
+    try {
+      devices = await bluetooth.getBondedDevices();
+    } catch (e) {
+      print("Error getting bonded devices: $e");
+    }
+
     setState(() {
+      _isConnected = isConnected ?? false;
       _devices = devices;
     });
+  }
+
+  void _connect(BluetoothDevice device) async {
+    if (_selectedDevice != null) {
+      bluetooth.connect(device).catchError((error) {
+        setState(() => _isConnected = false);
+      });
+      setState(() {
+        _selectedDevice = device;
+        _isConnected = true;
+      });
+    }
+  }
+
+  void _disconnect() {
+    bluetooth.disconnect();
+    setState(() => _isConnected = false);
   }
 
   @override
@@ -36,40 +63,46 @@ class _PrintSettingScreenState extends State<PrintSettingScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  _isConnected ? "Status: Connected" : "Status: Disconnected",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: _isConnected ? Colors.green : Colors.red,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
             DropdownButton<BluetoothDevice>(
-              value: _selectedDevice,
-              hint: const Text("Select Bluetooth Thermal Printer"),
               isExpanded: true,
+              hint: const Text("Select Bluetooth Printer"),
+              value: _selectedDevice,
               items: _devices.map((device) {
                 return DropdownMenuItem(
                   value: device,
                   child: Text(device.name ?? "Unknown Device"),
                 );
               }).toList(),
-              onChanged: (device) {
-                setState(() {
-                  _selectedDevice = device;
-                });
-              },
+              onChanged: (device) => setState(() => _selectedDevice = device),
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _selectedDevice == null
-                  ? null
-                  : () async {
-                      if (_isConnected) {
-                        await _printerService.disconnect();
-                        setState(() => _isConnected = false);
-                      } else {
-                        bool res = await _printerService.connect(_selectedDevice!);
-                        setState(() => _isConnected = res);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(_isConnected ? "Printer Connected Successfully" : "Connection Failed")),
-                        );
-                      }
-                    },
-              style: ElevatedButton.styleFrom(minimumSize: const Size.fromHeight(50)),
-              child: Text(_isConnected ? "Disconnect Printer" : "Connect Printer"),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: _selectedDevice != null ? () => _connect(_selectedDevice!) : null,
+                  child: const Text("Connect"),
+                ),
+                ElevatedButton(
+                  onPressed: _isConnected ? _disconnect : null,
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                  child: const Text("Disconnect"),
+                ),
+              ],
             ),
           ],
         ),
