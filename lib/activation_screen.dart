@@ -38,7 +38,7 @@ class _ActivationScreenState extends State<ActivationScreen> {
       r'^VM-[A-Z0-9]{8}$',
     ).hasMatch(licenseKey)) {
       _showError(
-        'License Key ပုံစံ မှားနေပါသည်။ VF-XXXXXXXX ပုံစံဖြင့် ထည့်ပါ။',
+        'License Key ပုံစံ မှားနေပါသည်။ VM-XXXXXXXX ပုံစံဖြင့် ထည့်ပါ။',
       );
       return;
     }
