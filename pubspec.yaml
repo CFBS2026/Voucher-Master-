@@ -1,20 +1,30 @@
-
 name: voucher_master
-description: "Voucher Master for Ruijie Gateway"
-publish_to: 'none'
+description: "Ruijie Gateway Voucher and Thermal Printing Mobile App"
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  blue_thermal_printer: ^1.2.3
+  # Network & API တွေအတွက်
+  http: ^1.2.0
+  dio: ^5.4.0
+
+  # Local Database (Voucher များနှင့် ရောင်းရငွေ သိမ်းရန်)
+  sqflite: ^2.3.2
+  path_provider: ^2.1.2
+
+  # Bluetooth Thermal Printer (စလစ်ထုတ်ရန်)
+  blue_thermal_printer: ^1.2.4
+  esc_pos_utils_plus: ^2.0.2
+
+  # UI လှပစေရန်နှင့် Icons များအတွက်
+  intl: ^0.19.0
   shared_preferences: ^2.2.2
-  http: ^1.1.0
-  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:
@@ -23,3 +33,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  # လိုအပ်ပါက Icons သို့မဟုတ် Fonts ထည့်ရန် နေရာ
+  # assets:
+  #   - assets/images/
