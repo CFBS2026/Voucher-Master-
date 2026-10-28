@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'screens/voucher_generator_screen.dart';
-import 'screens/printer_screen.dart';
-import 'screens/history_screen.dart';
-import 'services/printer_service.dart';
+import 'home_screen.dart';
+import 'print_setting_screen.dart';
+import 'activation_screen.dart';
 
 void main() {
   runApp(const VoucherMasterApp());
@@ -14,7 +13,7 @@ class VoucherMasterApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Voucher Master',
+      title: 'Voucher Pro',
       theme: ThemeData.dark().copyWith(
         primaryColor: Colors.blueAccent,
         scaffoldBackgroundColor: const Color(0xFF121212),
@@ -33,25 +32,24 @@ class MainNavigationScreen extends StatefulWidget {
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _currentIndex = 0;
-  final PrinterService _printerService = PrinterService();
+
+  final List<Widget> _screens = [
+    const HomeScreen(),
+    const PrintSettingScreen(),
+    const ActivationScreen(),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    final screens = [
-      VoucherGeneratorScreen(printerService: _printerService),
-      PrinterScreen(printerService: _printerService),
-      const HistoryScreen(),
-    ];
-
     return Scaffold(
-      body: screens[_currentIndex],
+      body: _screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) => setState(() => _currentIndex = index),
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.qr_code), label: "Generate"),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(icon: Icon(Icons.print), label: "Printer"),
-          BottomNavigationBarItem(icon: Icon(Icons.history), label: "History"),
+          BottomNavigationBarItem(icon: Icon(Icons.vpn_key), label: "Activation"),
         ],
       ),
     );
