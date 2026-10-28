@@ -20,7 +20,7 @@ class PrinterService {
       bluetooth.printCustom("Price: ${price.toStringAsFixed(0)} Ks", 1, 0);
       bluetooth.printNewLine();
       bluetooth.printCustom("Thank You!", 1, 1);
-      bluetooth.printPaperCut();
+      // bluetooth.printPaperCut();
     }
   }
 }
