@@ -10,7 +10,7 @@ class DatabaseHelper {
 
   Future<Database> get database async {
     if (_database != null) return _database!;
-    _database = await _initDB('vouchers.db');
+    _database = await _initDB('voucher_pro.db');
     return _database!;
   }
 
@@ -51,9 +51,14 @@ class DatabaseHelper {
   Future<double> getTotalRevenue() async {
     final db = await instance.database;
     final result = await db.rawQuery('SELECT SUM(price) as total FROM vouchers');
-    if (result.first['total'] != null) {
+    if (result.isNotEmpty && result.first['total'] != null) {
       return (result.first['total'] as num).toDouble();
     }
     return 0.0;
+  }
+
+  Future<void> close() async {
+    final db = await instance.database;
+    db.close();
   }
 }
