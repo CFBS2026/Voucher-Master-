@@ -1,14 +1,3 @@
-lib/
-├── main.dart
-├── activation_screen.dart
-├── home_screen.dart
-├── print_setting_screen.dart
-├── models/
-│   └── voucher_model.dart
-└── services/
-    ├── ruijie_api_service.dart
-    ├── printer_service.dart
-    └── database_helper.dart
 class Voucher {
   final int? id;
   final String code;
@@ -39,9 +28,8 @@ class Voucher {
       id: map['id'],
       code: map['code'],
       profileName: map['profileName'],
-      price: (map['price'] as num).toDouble(),
+      price: map['price'],
       generatedAt: map['generatedAt'],
     );
   }
 }
-
