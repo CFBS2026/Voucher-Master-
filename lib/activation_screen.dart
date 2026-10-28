@@ -38,7 +38,7 @@ class _ActivationScreenState extends State<ActivationScreen> {
       r'^VM-[A-Z0-9]{8}$',
     ).hasMatch(licenseKey)) {
       _showError(
-        'License Key ပုံစံ မှားနေပါသည်။ VM-XXXXXXXX ပုံစံဖြင့် ထည့်ပါ။',
+        'License Key ပုံစံ မှားနေပါသည်။ VM-A12345678 ပုံစံဖြင့် ထည့်ပါ။',
       );
       return;
     }
@@ -171,7 +171,7 @@ class _ActivationScreenState extends State<ActivationScreen> {
                     labelText: 'License Key',
                     labelStyle:
                         const TextStyle(color: Colors.white70),
-                    hintText: 'VM-XXXXXXXX',
+                    hintText: 'VM-A12345678',
                     hintStyle:
                         const TextStyle(color: Colors.white30),
                     prefixIcon: const Icon(
