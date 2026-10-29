@@ -34,14 +34,17 @@ class _ActivationScreenState extends State<ActivationScreen> {
       return;
     }
 
-    if (!RegExp(
-      r'^VM-[A-Z0-9]{8}$',
-    ).hasMatch(licenseKey)) {
-      _showError(
-        'License Key ပုံစံ မှားနေပါသည်။ VM-A12345678 ပုံစံဖြင့် ထည့်ပါ။',
-      );
+        // အကယ်၍ License Key ကို တင်းတင်းကျပ်ကျပ် မစစ်ဆေးဘဲ အလွယ်စမ်းချင်လျှင် ဤသို့ပြင်ပါ
+    if (gmail.isEmpty || !RegExp(r'^[a-zA-Z0-9._%+-]+@gmail\.com$').hasMatch(gmail)) {
+      _showError('မှန်ကန်သော Gmail လိပ်စာ ထည့်သွင်းပါ။');
       return;
     }
+
+    if (licenseKey.isEmpty) {
+      _showError('License Key ထည့်သွင်းပါ။');
+      return;
+    }
+
 
     setState(() {
       isLoading = true;
