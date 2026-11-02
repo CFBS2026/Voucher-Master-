@@ -1,0 +1,464 @@
+
+<!DOCTYPE html>
+<html lang="my">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101d38">
+<title>CFBS Digital Exam</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f1f4f9;color:#17243b;font-family:Arial,sans-serif}
+header{background:#101d38;color:white;padding:20px;text-align:center}
+header h2{margin:0;color:#e8bd55}
+header p{margin:7px 0 0;font-size:12px;color:#cbd5e1}
+nav{display:flex;overflow-x:auto;background:#182b4c;padding:8px;gap:6px}
+nav button{white-space:nowrap;background:#293d60;color:white;border:0;padding:11px;border-radius:7px}
+nav button.active{background:#d5a83d;color:#101d38;font-weight:bold}
+main{padding:14px;max-width:1000px;margin:auto}
+.page{display:none}
+.page.active{display:block}
+.card{background:white;padding:15px;border-radius:12px;margin-bottom:13px;box-shadow:0 2px 8px #0000000b}
+h3{margin-top:0;color:#18365e}
+input,select,textarea{width:100%;padding:11px;margin:5px 0 12px;border:1px solid #ccd4e0;border-radius:7px;background:white;font-size:14px}
+button{cursor:pointer}
+.btn{background:#17345b;color:white;border:0;border-radius:7px;padding:11px 15px;margin:3px}
+.gold{background:#d5a83d;color:#15233d}
+.red{background:#b83232;color:white}
+.green{background:#16804a;color:white}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stat{background:#17345b;color:white;padding:16px;border-radius:10px}
+.stat b{font-size:25px;display:block;margin-top:7px}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:550px}
+th,td{padding:10px;border-bottom:1px solid #e2e7ef;text-align:left}
+th{background:#eaf0f8}
+.tablewrap{overflow-x:auto}
+.small{font-size:12px;color:#68778d}
+.question{border:1px solid #dce3ec;padding:12px;border-radius:9px;margin:10px 0}
+.question strong{display:block;margin-bottom:8px}
+.actions{display:flex;flex-wrap:wrap;gap:5px}
+label{font-size:13px;font-weight:bold}
+hr{border:0;border-top:1px solid #e5e9ef;margin:14px 0}
+@media(min-width:650px){.grid{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+
+<header>
+<h2>CFBS DIGITAL EXAM</h2>
+<p>CHINDWIN FUTURE BRIGHT SCHOOL</p>
+<p>STUDENT EXAMINATION MANAGEMENT SYSTEM</p>
+</header>
+
+<nav>
+<button class="active" onclick="showPage('dashboard',this)">Dashboard</button>
+<button onclick="showPage('students',this)">Students</button>
+<button onclick="showPage('subjects',this)">Subjects</button>
+<button onclick="showPage('exams',this)">Create Exam</button>
+<button onclick="showPage('results',this)">Results</button>
+<button onclick="showPage('backup',this)">Backup</button>
+</nav>
+
+<main>
+
+<section id="dashboard" class="page active">
+<div class="card">
+<h3>Dashboard</h3>
+<p>CFBS Digital Examination System</p>
+<div class="grid">
+<div class="stat">Students<b id="studentCount">0</b></div>
+<div class="stat">Examinations<b id="examCount">0</b></div>
+<div class="stat">Subjects<b id="subjectCount">0</b></div>
+<div class="stat">Results<b id="resultCount">0</b></div>
+</div>
+</div>
+<div class="card">
+<h3>စာမေးပွဲ ၅ ကြိမ်</h3>
+<ol>
+<li>ပထမလပတ်</li>
+<li>ဒုတိယလပတ်</li>
+<li>တတိယလပတ်</li>
+<li>စတုတ္ထလပတ်</li>
+<li>အတန်းတင်စာမေးပွဲ</li>
+</ol>
+</div>
+<div class="card">
+<h3>Grade သတ်မှတ်ချက်</h3>
+<p>A = 80 နှင့်အထက်</p>
+<p>B = 60 မှ 79</p>
+<p>C = 40 မှ 59</p>
+<p>D = 40 အောက်</p>
+</div>
+</section>
+
+<section id="students" class="page">
+<div class="card">
+<h3>ကျောင်းသားအသစ်ထည့်ရန်</h3>
+<label>ကျောင်းသားအမည်</label>
+<input id="sName" placeholder="ကျောင်းသားအမည်">
+<label>Student ID</label>
+<input id="sId" placeholder="ကျောင်းသားအမှတ်">
+<label>အတန်း</label>
+<select id="sGrade">
+<option value="">အတန်းရွေးပါ</option>
+<option>KG</option>
+<option>Grade 1</option><option>Grade 2</option>
+<option>Grade 3</option><option>Grade 4</option>
+<option>Grade 5</option><option>Grade 6</option>
+<option>Grade 7</option><option>Grade 8</option>
+<option>Grade 9</option><option>Grade 10</option>
+<option>Grade 11</option><option>Grade 12</option>
+</select>
+<label>ဘာသာတွဲ (Grade 10–12)</label>
+<select id="sCombo">
+<option value="">မသတ်မှတ်ရသေး</option>
+<option value="1">Combination 1 - Biology</option>
+<option value="2">Combination 2 - Economics (Science)</option>
+<option value="3">Combination 3 - Arts</option>
+</select>
+<button class="btn gold" onclick="addStudent()">ကျောင်းသားသိမ်းမည်</button>
+</div>
+<div class="card">
+<h3>ကျောင်းသားစာရင်း</h3>
+<div class="tablewrap">
+<table>
+<thead><tr><th>ID</th><th>အမည်</th><th>အတန်း</th><th>ဘာသာတွဲ</th><th>လုပ်ဆောင်ချက်</th></tr></thead>
+<tbody id="studentTable"></tbody>
+</table>
+</div>
+</div>
+</section>
+
+<section id="subjects" class="page">
+<div class="card">
+<h3>ဘာသာရပ်ထည့်ရန်</h3>
+<label>အတန်း</label>
+<select id="subGrade">
+<option>KG</option>
+<option>Grade 1</option><option>Grade 2</option>
+<option>Grade 3</option><option>Grade 4</option>
+<option>Grade 5</option><option>Grade 6</option>
+<option>Grade 7</option><option>Grade 8</option>
+<option>Grade 9</option><option>Grade 10</option>
+<option>Grade 11</option><option>Grade 12</option>
+</select>
+<label>ဘာသာရပ်အမည်</label>
+<input id="subName" placeholder="ဥပမာ Mathematics">
+<button class="btn gold" onclick="addSubject()">ဘာသာရပ်သိမ်းမည်</button>
+</div>
+<div class="card">
+<h3>အတန်းအလိုက် ဘာသာရပ်များ</h3>
+<div id="subjectList"></div>
+</div>
+</section>
+
+<section id="exams" class="page">
+<div class="card">
+<h3>စာမေးပွဲအသစ်ဖန်တီးရန်</h3>
+<label>စာမေးပွဲအမျိုးအစား</label>
+<select id="examType">
+<option>ပထမလပတ်</option>
+<option>ဒုတိယလပတ်</option>
+<option>တတိယလပတ်</option>
+<option>စတုတ္ထလပတ်</option>
+<option>အတန်းတင်စာမေးပွဲ</option>
+</select>
+<label>အတန်း</label>
+<select id="examGrade">
+<option>KG</option>
+<option>Grade 1</option><option>Grade 2</option>
+<option>Grade 3</option><option>Grade 4</option>
+<option>Grade 5</option><option>Grade 6</option>
+<option>Grade 7</option><option>Grade 8</option>
+<option>Grade 9</option><option>Grade 10</option>
+<option>Grade 11</option><option>Grade 12</option>
+</select>
+<label>ဘာသာရပ်</label>
+<input id="examSubject" placeholder="Mathematics">
+<label>ဖြေဆိုချိန် (မိနစ်)</label>
+<input id="examTime" type="number" value="60" min="1">
+<hr>
+<h3>မေးခွန်းများ</h3>
+<p class="small">မေးခွန်းတစ်ပုဒ်ချင်းစီ၏ အမှတ်ကို သီးခြားထည့်ပါ။ စုစုပေါင်းအမှတ်ကို အလိုအလျောက်တွက်ပေးပါမည်။</p>
+<div id="questionList"></div>
+<button class="btn" onclick="addQuestion()">+ မေးခွန်းထပ်ထည့်ရန်</button>
+<div class="card">
+စုစုပေါင်းမေးခွန်း <b id="qCount">0</b>
+<br><br>
+စုစုပေါင်းအမှတ် <b id="totalMarks">0</b>
+</div>
+<button class="btn gold" onclick="saveExam()">စာမေးပွဲသိမ်းမည်</button>
+</div>
+
+<div class="card">
+<h3>ဖန်တီးထားသော စာမေးပွဲများ</h3>
+<div id="examList"></div>
+</div>
+</section>
+
+<section id="results" class="page">
+<div class="card">
+<h3>အမှတ်ထည့်သွင်းရန်</h3>
+<label>စာမေးပွဲရွေးပါ</label>
+<select id="resultExam" onchange="loadResultStudents()"></select>
+<label>ကျောင်းသားရွေးပါ</label>
+<select id="resultStudent"></select>
+<div id="scoreInputs"></div>
+<button class="btn gold" onclick="saveResult()">ရလဒ်သိမ်းမည်</button>
+</div>
+<div class="card">
+<h3>ရလဒ်စာရင်း</h3>
+<div class="tablewrap">
+<table>
+<thead><tr><th>ကျောင်းသား</th><th>အတန်း</th><th>စာမေးပွဲ</th><th>ရမှတ်</th><th>ရာခိုင်နှုန်း</th><th>Grade</th></tr></thead>
+<tbody id="resultTable"></tbody>
+</table>
+</div>
+</div>
+</section>
+
+<section id="backup" class="page">
+<div class="card">
+<h3>Data Backup / Restore</h3>
+<p>ကျောင်းသား၊ ဘာသာရပ်၊ စာမေးပွဲနှင့် ရလဒ်များကို JSON ဖိုင်အဖြစ် သိမ်းနိုင်ပါသည်။</p>
+<button class="btn gold" onclick="backupData()">Backup Download</button>
+<hr>
+<label>Backup ဖိုင်ပြန်သွင်းရန်</label>
+<input type="file" id="restoreFile" accept=".json">
+<button class="btn" onclick="restoreData()">Restore Data</button>
+</div>
+<div class="card">
+<button class="btn red" onclick="clearAll()">Data အားလုံးဖျက်မည်</button>
+<p class="small">ဖျက်ပြီးလျှင် ပြန်ယူ၍မရနိုင်ပါ။ Backup အရင်လုပ်ပါ။</p>
+</div>
+</section>
+
+</main>
+
+<script>
+const KEY="CFBS_DIGITAL_EXAM_V1";
+
+let db=JSON.parse(localStorage.getItem(KEY)||'{"students":[],"subjects":[],"exams":[],"results":[]}');
+
+function saveDB(){
+ localStorage.setItem(KEY,JSON.stringify(db));
+ updateDashboard();
+}
+
+function showPage(id,btn){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+ btn.classList.add('active');
+ renderAll();
+}
+
+function updateDashboard(){
+ studentCount.textContent=db.students.length;
+ examCount.textContent=db.exams.length;
+ subjectCount.textContent=db.subjects.length;
+ resultCount.textContent=db.results.length;
+}
+
+function addStudent(){
+ let name=sName.value.trim(),id=sId.value.trim(),grade=sGrade.value,combo=sCombo.value;
+ if(!name||!id||!grade)return alert("အချက်အလက်ပြည့်စုံစွာထည့်ပါ");
+ if(db.students.some(s=>s.id===id))return alert("Student ID ရှိပြီးသားဖြစ်သည်");
+ db.students.push({name,id,grade,combo});
+ saveDB();renderAll();
+ sName.value="";sId.value="";sGrade.value="";sCombo.value="";
+}
+
+function deleteStudent(id){
+ if(!confirm("ကျောင်းသားကို ဖျက်မှာသေချာပါသလား"))return;
+ db.students=db.students.filter(s=>s.id!==id);
+ saveDB();renderAll();
+}
+
+function addSubject(){
+ let grade=subGrade.value,name=subName.value.trim();
+ if(!name)return alert("ဘာသာရပ်အမည်ထည့်ပါ");
+ if(db.subjects.some(s=>s.grade===grade&&s.name===name))return alert("ဘာသာရပ်ရှိပြီးသားပါ");
+ db.subjects.push({grade,name});
+ saveDB();renderAll();subName.value="";
+}
+
+function deleteSubject(index){
+ db.subjects.splice(index,1);saveDB();renderAll();
+}
+
+let questions=[];
+
+function addQuestion(){
+ questions.push({text:"",marks:1,options:["","","",""],answer:0});
+ renderQuestions();
+}
+
+function renderQuestions(){
+ questionList.innerHTML="";
+ questions.forEach((q,i)=>{
+ let div=document.createElement("div");
+ div.className="question";
+ div.innerHTML=`
+ <strong>မေးခွန်း ${i+1}</strong>
+ <label>မေးခွန်းစာသား</label>
+ <textarea rows="2" placeholder="မေးခွန်းရေးပါ"></textarea>
+ <label>အမှတ်</label>
+ <input type="number" min="0" step="0.5" value="${q.marks}">
+ <label>အဖြေရွေးချယ်စရာ (လိုအပ်ပါက)</label>
+ ${[0,1,2,3].map(n=>`<input placeholder="အဖြေ ${n+1}" value="${q.options[n]}">`).join("")}
+ <label>အဖြေမှန်</label>
+ <select>
+ <option value="0">အဖြေ ၁</option>
+ <option value="1">အဖြေ ၂</option>
+ <option value="2">အဖြေ ၃</option>
+ <option value="3">အဖြေ ၄</option>
+ </select>
+ <button class="btn red">ဖယ်ရှားရန်</button>`;
+ let inputs=div.querySelectorAll("textarea,input,select");
+ inputs[0].value=q.text;
+ inputs[1].value=q.marks;
+ [2,3,4,5].forEach((n,j)=>inputs[n].value=q.options[j]);
+ inputs[6].value=q.answer;
+ inputs[0].oninput=e=>q.text=e.target.value;
+ inputs[1].oninput=e=>{q.marks=Math.max(0,Number(e.target.value)||0);updateQuestionTotal()};
+ [2,3,4,5].forEach((n,j)=>inputs[n].oninput=e=>q.options[j]=e.target.value);
+ inputs[6].onchange=e=>q.answer=Number(e.target.value);
+ div.querySelector("button").onclick=()=>{questions.splice(i,1);renderQuestions()};
+ questionList.appendChild(div);
+ });
+ updateQuestionTotal();
+}
+
+function updateQuestionTotal(){
+ qCount.textContent=questions.length;
+ totalMarks.textContent=questions.reduce((a,q)=>a+Number(q.marks||0),0);
+}
+
+function saveExam(){
+ let type=examType.value,grade=examGrade.value,subject=examSubject.value.trim(),time=Number(examTime.value);
+ if(!subject||!questions.length||!time)return alert("စာမေးပွဲအချက်အလက်နှင့် မေးခွန်းများထည့်ပါ");
+ if(questions.some(q=>!q.text.trim()||Number(q.marks)<=0))return alert("မေးခွန်းစာသားနှင့် အမှတ်ကို စစ်ဆေးပါ");
+ let exam={
+ id:Date.now(),type,grade,subject,time,
+ questions:JSON.parse(JSON.stringify(questions)),
+ total:questions.reduce((a,q)=>a+Number(q.marks),0)
+ };
+ db.exams.push(exam);
+ saveDB();questions=[];renderQuestions();renderAll();
+ alert("စာမေးပွဲသိမ်းပြီးပါပြီ");
+}
+
+function deleteExam(id){
+ if(!confirm("စာမေးပွဲဖျက်မှာသေချာပါသလား"))return;
+ db.exams=db.exams.filter(e=>e.id!==id);
+ saveDB();renderAll();
+}
+
+function loadResultStudents(){
+ let id=Number(resultExam.value);
+ let exam=db.exams.find(e=>e.id===id);
+ let students=db.students.filter(s=>s.grade===exam?.grade);
+ resultStudent.innerHTML=students.map(s=>`<option value="${s.id}">${s.name} (${s.id})</option>`).join("");
+ scoreInputs.innerHTML="";
+ if(!exam)return;
+ exam.questions.forEach((q,i)=>{
+ let div=document.createElement("div");
+ div.className="question";
+ div.innerHTML=`<strong>${i+1}. ${escapeHTML(q.text)}</strong>
+ <p class="small">အမှတ်ပြည့် ${q.marks}</p>
+ <label>ရမှတ်</label>
+ <input type="number" min="0" max="${q.marks}" step="0.5" value="0">`;
+ div.querySelector("input").dataset.index=i;
+ scoreInputs.appendChild(div);
+ });
+}
+
+function saveResult(){
+ let exam=db.exams.find(e=>e.id===Number(resultExam.value));
+ let student=db.students.find(s=>s.id===resultStudent.value);
+ if(!exam||!student)return alert("စာမေးပွဲနှင့် ကျောင်းသားရွေးပါ");
+ let scores=[...scoreInputs.querySelectorAll("input")].map((input,i)=>{
+ let value=Number(input.value);
+ if(value<0||value>exam.questions[i].marks)throw new Error("ရမှတ်သည် အမှတ်ပြည့်ထက် မကျော်ရပါ");
+ return value;
+ });
+ let score=scores.reduce((a,b)=>a+b,0);
+ let percent=exam.total?score/exam.total*100:0;
+ let grade=percent>=80?"A":percent>=60?"B":percent>=40?"C":"D";
+ db.results=db.results.filter(r=>!(r.examId===exam.id&&r.studentId===student.id));
+ db.results.push({examId:exam.id,studentId:student.id,scores,score,total:exam.total,percent,grade});
+ saveDB();renderAll();alert("ရလဒ်သိမ်းပြီးပါပြီ");
+}
+
+function escapeHTML(str){
+ return String(str).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function renderAll(){
+ studentTable.innerHTML=db.students.map(s=>`
+ <tr><td>${escapeHTML(s.id)}</td><td>${escapeHTML(s.name)}</td>
+ <td>${escapeHTML(s.grade)}</td><td>${s.combo||"-"}</td>
+ <td><button class="btn red" onclick="deleteStudent('${s.id}')">ဖျက်</button></td></tr>`).join("");
+
+ subjectList.innerHTML=db.subjects.map((s,i)=>`
+ <p>${escapeHTML(s.grade)} — ${escapeHTML(s.name)}
+ <button class="btn red" onclick="deleteSubject(${i})">ဖျက်</button></p>`).join("");
+
+ examList.innerHTML=db.exams.map(e=>`
+ <div class="question">
+ <strong>${escapeHTML(e.type)} - ${escapeHTML(e.grade)}</strong>
+ ${escapeHTML(e.subject)}<br>
+ မေးခွန်း ${e.questions.length} ပုဒ် | အမှတ် ${e.total} | ${e.time} မိနစ်
+ <br><button class="btn red" onclick="deleteExam(${e.id})">ဖျက်</button>
+ </div>`).join("");
+
+ resultExam.innerHTML=db.exams.map(e=>`
+ <option value="${e.id}">${escapeHTML(e.type)} - ${escapeHTML(e.grade)} - ${escapeHTML(e.subject)}</option>`).join("");
+
+ resultTable.innerHTML=db.results.map(r=>{
+ let s=db.students.find(x=>x.id===r.studentId);
+ let e=db.exams.find(x=>x.id===r.examId);
+ if(!s||!e)return "";
+ return `<tr><td>${escapeHTML(s.name)}</td><td>${s.grade}</td>
+ <td>${escapeHTML(e.type)} / ${escapeHTML(e.subject)}</td>
+ <td>${r.score}/${r.total}</td><td>${r.percent.toFixed(1)}%</td><td>${r.grade}</td></tr>`;
+ }).join("");
+
+ updateDashboard();
+}
+
+function backupData(){
+ let blob=new Blob([JSON.stringify(db,null,2)],{type:"application/json"});
+ let url=URL.createObjectURL(blob);
+ let a=document.createElement("a");
+ a.href=url;a.download="CFBS_Exam_Backup.json";a.click();
+ URL.revokeObjectURL(url);
+}
+
+function restoreData(){
+ let file=restoreFile.files[0];
+ if(!file)return alert("Backup ဖိုင်ရွေးပါ");
+ let reader=new FileReader();
+ reader.onload=()=>{
+ try{
+ let data=JSON.parse(reader.result);
+ if(!Array.isArray(data.students)||!Array.isArray(data.exams)||
+ !Array.isArray(data.subjects)||!Array.isArray(data.results))throw Error();
+ db=data;saveDB();renderAll();alert("Restore အောင်မြင်ပါသည်");
+ }catch(e){alert("Backup ဖိုင်မမှန်ပါ");}
+ };
+ reader.readAsText(file);
+}
+
+function clearAll(){
+ if(!confirm("Data အားလုံးကို အပြီးဖျက်မှာ သေချာပါသလား"))return;
+ db={students:[],subjects:[],exams:[],results:[]};
+ saveDB();renderAll();
+}
+
+addQuestion();
+renderAll();
+</script>
+</body>
+</html>
