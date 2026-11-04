@@ -1,464 +1,1189 @@
-
 <!DOCTYPE html>
 <html lang="my">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#101d38">
-<title>CFBS Digital Exam</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;background:#f1f4f9;color:#17243b;font-family:Arial,sans-serif}
-header{background:#101d38;color:white;padding:20px;text-align:center}
-header h2{margin:0;color:#e8bd55}
-header p{margin:7px 0 0;font-size:12px;color:#cbd5e1}
-nav{display:flex;overflow-x:auto;background:#182b4c;padding:8px;gap:6px}
-nav button{white-space:nowrap;background:#293d60;color:white;border:0;padding:11px;border-radius:7px}
-nav button.active{background:#d5a83d;color:#101d38;font-weight:bold}
-main{padding:14px;max-width:1000px;margin:auto}
-.page{display:none}
-.page.active{display:block}
-.card{background:white;padding:15px;border-radius:12px;margin-bottom:13px;box-shadow:0 2px 8px #0000000b}
-h3{margin-top:0;color:#18365e}
-input,select,textarea{width:100%;padding:11px;margin:5px 0 12px;border:1px solid #ccd4e0;border-radius:7px;background:white;font-size:14px}
-button{cursor:pointer}
-.btn{background:#17345b;color:white;border:0;border-radius:7px;padding:11px 15px;margin:3px}
-.gold{background:#d5a83d;color:#15233d}
-.red{background:#b83232;color:white}
-.green{background:#16804a;color:white}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.stat{background:#17345b;color:white;padding:16px;border-radius:10px}
-.stat b{font-size:25px;display:block;margin-top:7px}
-table{width:100%;border-collapse:collapse;font-size:13px;min-width:550px}
-th,td{padding:10px;border-bottom:1px solid #e2e7ef;text-align:left}
-th{background:#eaf0f8}
-.tablewrap{overflow-x:auto}
-.small{font-size:12px;color:#68778d}
-.question{border:1px solid #dce3ec;padding:12px;border-radius:9px;margin:10px 0}
-.question strong{display:block;margin-bottom:8px}
-.actions{display:flex;flex-wrap:wrap;gap:5px}
-label{font-size:13px;font-weight:bold}
-hr{border:0;border-top:1px solid #e5e9ef;margin:14px 0}
-@media(min-width:650px){.grid{grid-template-columns:repeat(4,1fr)}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voucher Master Pro</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0f1322;
+            --card-bg: #1a1f36;
+            --card-hover: #232946;
+            --accent-blue: #2563eb;
+            --accent-light-blue: #3b82f6;
+            --accent-purple: #7c3aed;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --danger: #ef4444;
+            --success: #10b981;
+            --border-color: #2e3654;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Pyidaungsu', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #05070f;
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .mobile-container {
+            width: 100%;
+            max-width: 430px;
+            height: 100vh;
+            max-height: 932px;
+            background-color: var(--bg-dark);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        @media (min-width: 480px) {
+            .mobile-container {
+                height: 90vh;
+                border-radius: 28px;
+                border: 2px solid var(--border-color);
+            }
+        }
+
+        /* Header */
+        .app-header {
+            padding: 16px 20px;
+            background: linear-gradient(180deg, #182038 0%, var(--bg-dark) 100%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .profile-card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            border: 1px solid var(--border-color);
+        }
+
+        .vp-logo {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #d97706 0%, #78350f 100%);
+            border: 2px solid #fbbf24;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 900;
+            font-size: 18px;
+            color: #fff;
+            box-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
+        }
+
+        .profile-info h3 {
+            font-size: 12px;
+            color: var(--text-sub);
+            font-weight: 400;
+        }
+
+        .profile-info h2 {
+            font-size: 18px;
+            color: var(--text-main);
+            font-weight: 700;
+            margin-top: 2px;
+        }
+
+        /* Top Navigation Tabs */
+        .tab-nav {
+            display: flex;
+            padding: 12px 20px;
+            gap: 10px;
+            background-color: var(--bg-dark);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            background-color: var(--card-bg);
+            color: var(--text-sub);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--accent-light-blue), var(--accent-blue));
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        /* Main Content Scrollable Area */
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 20px 20px 20px;
+        }
+
+        .content-area::-webkit-scrollbar {
+            width: 4px;
+        }
+        .content-area::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        /* Menu Items List */
+        .menu-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .menu-item {
+            background-color: var(--card-bg);
+            padding: 16px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            transition: transform 0.1s ease, background 0.2s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .menu-item:active {
+            transform: scale(0.98);
+            background-color: var(--card-hover);
+        }
+
+        .menu-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background-color: rgba(59, 130, 246, 0.1);
+            color: var(--accent-light-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .menu-text {
+            flex: 1;
+        }
+
+        .menu-text h4 {
+            font-size: 16px;
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .menu-text p {
+            font-size: 12px;
+            color: var(--text-sub);
+            margin-top: 2px;
+        }
+
+        .logout-item .menu-icon {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        /* Modal Screens / Overlays */
+        .sub-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-dark);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .sub-screen.active {
+            transform: translateX(0);
+        }
+
+        .screen-header {
+            padding: 16px 20px;
+            background-color: var(--accent-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .screen-title-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .screen-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            color: var(--text-sub);
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: white;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-light-blue);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--accent-light-blue), var(--accent-blue));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+        }
+
+        /* Slip Style Grid */
+        .slip-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .slip-card {
+            background-color: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 10px;
+            cursor: pointer;
+            text-align: center;
+            position: relative;
+        }
+
+        .slip-card.selected {
+            border-color: var(--accent-light-blue);
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+
+        .slip-card h5 {
+            font-size: 12px;
+            color: var(--text-sub);
+            margin-bottom: 8px;
+        }
+
+        .slip-preview {
+            background-color: white;
+            color: black;
+            border-radius: 6px;
+            padding: 8px;
+            font-family: monospace;
+            font-size: 9px;
+            text-align: left;
+            line-height: 1.3;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* Revenue List */
+        .revenue-header-bar {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 14px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .revenue-date {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--bg-dark);
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 14px;
+        }
+
+        .revenue-total {
+            font-size: 14px;
+            color: var(--text-sub);
+        }
+
+        .revenue-total span {
+            color: white;
+            font-weight: 700;
+        }
+
+        .revenue-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .revenue-info h4 {
+            font-size: 16px;
+            color: white;
+        }
+
+        .revenue-info p {
+            font-size: 12px;
+            color: var(--text-sub);
+            margin-top: 2px;
+        }
+
+        .price-input {
+            width: 90px;
+            padding: 8px 10px;
+            background-color: white;
+            color: black;
+            border-radius: 8px;
+            border: none;
+            font-size: 14px;
+            font-weight: 700;
+            text-align: right;
+        }
+
+        /* List Items */
+        .list-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .badge-danger { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+        .badge-success { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; }
+
+        /* Login Modal Overlay */
+        .auth-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-dark);
+            z-index: 500;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 30px;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-header .vp-logo {
+            width: 70px;
+            height: 70px;
+            font-size: 26px;
+            margin: 0 auto 16px auto;
+        }
+
+        /* Alert Box */
+        .alert-box {
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 13px;
+            margin-bottom: 16px;
+            display: none;
+        }
+        .alert-error { background: rgba(239, 68, 68, 0.15); border: 1px solid var(--danger); color: #fca5a5; }
+        .alert-info { background: rgba(59, 130, 246, 0.15); border: 1px solid var(--accent-light-blue); color: #93c5fd; }
+    </style>
 </head>
 <body>
 
-<header>
-<h2>CFBS DIGITAL EXAM</h2>
-<p>CHINDWIN FUTURE BRIGHT SCHOOL</p>
-<p>STUDENT EXAMINATION MANAGEMENT SYSTEM</p>
-</header>
+<div class="mobile-container">
 
-<nav>
-<button class="active" onclick="showPage('dashboard',this)">Dashboard</button>
-<button onclick="showPage('students',this)">Students</button>
-<button onclick="showPage('subjects',this)">Subjects</button>
-<button onclick="showPage('exams',this)">Create Exam</button>
-<button onclick="showPage('results',this)">Results</button>
-<button onclick="showPage('backup',this)">Backup</button>
-</nav>
+    <!-- 1. AUTHENTICATION LOGIN OVERLAY -->
+    <div id="authScreen" class="auth-overlay">
+        <div class="auth-header">
+            <div class="vp-logo">VP</div>
+            <h2 style="font-size: 24px; font-weight: 800; margin-bottom: 6px;">Voucher Master</h2>
+            <p style="color: var(--text-sub); font-size: 13px;">Ruijie Hotspot Gateway Management System</p>
+        </div>
 
-<main>
+        <div id="authAlert" class="alert-box alert-error"></div>
 
-<section id="dashboard" class="page active">
-<div class="card">
-<h3>Dashboard</h3>
-<p>CFBS Digital Examination System</p>
-<div class="grid">
-<div class="stat">Students<b id="studentCount">0</b></div>
-<div class="stat">Examinations<b id="examCount">0</b></div>
-<div class="stat">Subjects<b id="subjectCount">0</b></div>
-<div class="stat">Results<b id="resultCount">0</b></div>
-</div>
-</div>
-<div class="card">
-<h3>စာမေးပွဲ ၅ ကြိမ်</h3>
-<ol>
-<li>ပထမလပတ်</li>
-<li>ဒုတိယလပတ်</li>
-<li>တတိယလပတ်</li>
-<li>စတုတ္ထလပတ်</li>
-<li>အတန်းတင်စာမေးပွဲ</li>
-</ol>
-</div>
-<div class="card">
-<h3>Grade သတ်မှတ်ချက်</h3>
-<p>A = 80 နှင့်အထက်</p>
-<p>B = 60 မှ 79</p>
-<p>C = 40 မှ 59</p>
-<p>D = 40 အောက်</p>
-</div>
-</section>
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label><i class="fa-solid fa-envelope"></i> User Gmail (License Check)</label>
+                <input type="email" id="loginGmail" class="form-control" placeholder="example@gmail.com" required>
+            </div>
+            <div class="form-group">
+                <label><i class="fa-solid fa-user-lock"></i> Ruijie Account Username</label>
+                <input type="text" id="loginRuijieUser" class="form-control" placeholder="Ruijie Account Name" required>
+            </div>
+            <div class="form-group">
+                <label><i class="fa-solid fa-key"></i> Ruijie Account Password</label>
+                <input type="password" id="loginRuijiePass" class="form-control" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn-primary" style="margin-top: 10px;">Login ဝင်မည်</button>
+        </form>
+    </div>
 
-<section id="students" class="page">
-<div class="card">
-<h3>ကျောင်းသားအသစ်ထည့်ရန်</h3>
-<label>ကျောင်းသားအမည်</label>
-<input id="sName" placeholder="ကျောင်းသားအမည်">
-<label>Student ID</label>
-<input id="sId" placeholder="ကျောင်းသားအမှတ်">
-<label>အတန်း</label>
-<select id="sGrade">
-<option value="">အတန်းရွေးပါ</option>
-<option>KG</option>
-<option>Grade 1</option><option>Grade 2</option>
-<option>Grade 3</option><option>Grade 4</option>
-<option>Grade 5</option><option>Grade 6</option>
-<option>Grade 7</option><option>Grade 8</option>
-<option>Grade 9</option><option>Grade 10</option>
-<option>Grade 11</option><option>Grade 12</option>
-</select>
-<label>ဘာသာတွဲ (Grade 10–12)</label>
-<select id="sCombo">
-<option value="">မသတ်မှတ်ရသေး</option>
-<option value="1">Combination 1 - Biology</option>
-<option value="2">Combination 2 - Economics (Science)</option>
-<option value="3">Combination 3 - Arts</option>
-</select>
-<button class="btn gold" onclick="addStudent()">ကျောင်းသားသိမ်းမည်</button>
-</div>
-<div class="card">
-<h3>ကျောင်းသားစာရင်း</h3>
-<div class="tablewrap">
-<table>
-<thead><tr><th>ID</th><th>အမည်</th><th>အတန်း</th><th>ဘာသာတွဲ</th><th>လုပ်ဆောင်ချက်</th></tr></thead>
-<tbody id="studentTable"></tbody>
-</table>
-</div>
-</div>
-</section>
+    <!-- MAIN APP HEADER -->
+    <div class="app-header">
+        <div class="profile-card">
+            <div class="vp-logo">VP</div>
+            <div class="profile-info">
+                <h3>Voucher Pro</h3>
+                <h2 id="displayProjectName">Moe</h2>
+            </div>
+        </div>
+    </div>
 
-<section id="subjects" class="page">
-<div class="card">
-<h3>ဘာသာရပ်ထည့်ရန်</h3>
-<label>အတန်း</label>
-<select id="subGrade">
-<option>KG</option>
-<option>Grade 1</option><option>Grade 2</option>
-<option>Grade 3</option><option>Grade 4</option>
-<option>Grade 5</option><option>Grade 6</option>
-<option>Grade 7</option><option>Grade 8</option>
-<option>Grade 9</option><option>Grade 10</option>
-<option>Grade 11</option><option>Grade 12</option>
-</select>
-<label>ဘာသာရပ်အမည်</label>
-<input id="subName" placeholder="ဥပမာ Mathematics">
-<button class="btn gold" onclick="addSubject()">ဘာသာရပ်သိမ်းမည်</button>
-</div>
-<div class="card">
-<h3>အတန်းအလိုက် ဘာသာရပ်များ</h3>
-<div id="subjectList"></div>
-</div>
-</section>
+    <!-- MAIN APP TABS -->
+    <div class="tab-nav">
+        <button id="tabHomeBtn" class="tab-btn active" onclick="switchMainTab('home')">
+            <i class="fa-solid fa-house"></i> Home
+        </button>
+        <button id="tabToolsBtn" class="tab-btn" onclick="switchMainTab('tools')">
+            <i class="fa-solid fa-screwdriver-wrench"></i> Tools
+        </button>
+    </div>
 
-<section id="exams" class="page">
-<div class="card">
-<h3>စာမေးပွဲအသစ်ဖန်တီးရန်</h3>
-<label>စာမေးပွဲအမျိုးအစား</label>
-<select id="examType">
-<option>ပထမလပတ်</option>
-<option>ဒုတိယလပတ်</option>
-<option>တတိယလပတ်</option>
-<option>စတုတ္ထလပတ်</option>
-<option>အတန်းတင်စာမေးပွဲ</option>
-</select>
-<label>အတန်း</label>
-<select id="examGrade">
-<option>KG</option>
-<option>Grade 1</option><option>Grade 2</option>
-<option>Grade 3</option><option>Grade 4</option>
-<option>Grade 5</option><option>Grade 6</option>
-<option>Grade 7</option><option>Grade 8</option>
-<option>Grade 9</option><option>Grade 10</option>
-<option>Grade 11</option><option>Grade 12</option>
-</select>
-<label>ဘာသာရပ်</label>
-<input id="examSubject" placeholder="Mathematics">
-<label>ဖြေဆိုချိန် (မိနစ်)</label>
-<input id="examTime" type="number" value="60" min="1">
-<hr>
-<h3>မေးခွန်းများ</h3>
-<p class="small">မေးခွန်းတစ်ပုဒ်ချင်းစီ၏ အမှတ်ကို သီးခြားထည့်ပါ။ စုစုပေါင်းအမှတ်ကို အလိုအလျောက်တွက်ပေးပါမည်။</p>
-<div id="questionList"></div>
-<button class="btn" onclick="addQuestion()">+ မေးခွန်းထပ်ထည့်ရန်</button>
-<div class="card">
-စုစုပေါင်းမေးခွန်း <b id="qCount">0</b>
-<br><br>
-စုစုပေါင်းအမှတ် <b id="totalMarks">0</b>
-</div>
-<button class="btn gold" onclick="saveExam()">စာမေးပွဲသိမ်းမည်</button>
-</div>
+    <!-- MAIN CONTENT VIEW -->
+    <div class="content-area">
 
-<div class="card">
-<h3>ဖန်တီးထားသော စာမေးပွဲများ</h3>
-<div id="examList"></div>
-</div>
-</section>
+        <!-- HOME TAB CONTENT -->
+        <div id="homeTabContent" class="menu-list">
+            <div class="menu-item" onclick="openScreen('voucherManagerScreen')">
+                <div class="menu-icon"><i class="fa-solid fa-receipt"></i></div>
+                <div class="menu-text">
+                    <h4>Voucher Manager</h4>
+                    <p>Voucher Code များ Print ထုတ်ရန်</p>
+                </div>
+            </div>
 
-<section id="results" class="page">
-<div class="card">
-<h3>အမှတ်ထည့်သွင်းရန်</h3>
-<label>စာမေးပွဲရွေးပါ</label>
-<select id="resultExam" onchange="loadResultStudents()"></select>
-<label>ကျောင်းသားရွေးပါ</label>
-<select id="resultStudent"></select>
-<div id="scoreInputs"></div>
-<button class="btn gold" onclick="saveResult()">ရလဒ်သိမ်းမည်</button>
-</div>
-<div class="card">
-<h3>ရလဒ်စာရင်း</h3>
-<div class="tablewrap">
-<table>
-<thead><tr><th>ကျောင်းသား</th><th>အတန်း</th><th>စာမေးပွဲ</th><th>ရမှတ်</th><th>ရာခိုင်နှုန်း</th><th>Grade</th></tr></thead>
-<tbody id="resultTable"></tbody>
-</table>
-</div>
-</div>
-</section>
+            <div class="menu-item" onclick="openScreen('connectedDevicesScreen')">
+                <div class="menu-icon"><i class="fa-solid fa-network-wired"></i></div>
+                <div class="menu-text">
+                    <h4>Connected Devices</h4>
+                    <p>ချိတ်ဆက်ထားသော ဖုန်းများ ကြည့်ရန်</p>
+                </div>
+            </div>
 
-<section id="backup" class="page">
-<div class="card">
-<h3>Data Backup / Restore</h3>
-<p>ကျောင်းသား၊ ဘာသာရပ်၊ စာမေးပွဲနှင့် ရလဒ်များကို JSON ဖိုင်အဖြစ် သိမ်းနိုင်ပါသည်။</p>
-<button class="btn gold" onclick="backupData()">Backup Download</button>
-<hr>
-<label>Backup ဖိုင်ပြန်သွင်းရန်</label>
-<input type="file" id="restoreFile" accept=".json">
-<button class="btn" onclick="restoreData()">Restore Data</button>
-</div>
-<div class="card">
-<button class="btn red" onclick="clearAll()">Data အားလုံးဖျက်မည်</button>
-<p class="small">ဖျက်ပြီးလျှင် ပြန်ယူ၍မရနိုင်ပါ။ Backup အရင်လုပ်ပါ။</p>
-</div>
-</section>
+            <div class="menu-item" onclick="openScreen('blacklistScreen')">
+                <div class="menu-icon"><i class="fa-solid fa-ban"></i></div>
+                <div class="menu-text">
+                    <h4>BlackList Devices</h4>
+                    <p>Blacklist လုပ်ထားသော ဖုန်းများ</p>
+                </div>
+            </div>
 
-</main>
+            <div class="menu-item" onclick="openScreen('printSettingScreen')">
+                <div class="menu-icon"><i class="fa-solid fa-print"></i></div>
+                <div class="menu-text">
+                    <h4>Print Setting</h4>
+                    <p>Wifi Name နှင့် Voucher Style ရွေးရန်</p>
+                </div>
+            </div>
+
+            <div class="menu-item" onclick="openScreen('revenueScreen')">
+                <div class="menu-icon"><i class="fa-solid fa-chart-pie"></i></div>
+                <div class="menu-text">
+                    <h4>Revenue</h4>
+                    <p>တစ်နေ့တာ Revenue စာရင်း</p>
+                </div>
+            </div>
+
+            <!-- ADMIN EXCLUSIVE MENU ITEM -->
+            <div id="adminOnlyMenuItem" class="menu-item" style="display: none;" onclick="openScreen('adminScreen')">
+                <div class="menu-icon" style="background: rgba(124, 58, 237, 0.15); color: var(--accent-purple);"><i class="fa-solid fa-user-shield"></i></div>
+                <div class="menu-text">
+                    <h4>Admin</h4>
+                    <p>Gmail ခွင့်ပြုရန်</p>
+                </div>
+            </div>
+
+            <div class="menu-item logout-item" onclick="handleLogout()">
+                <div class="menu-icon"><i class="fa-solid fa-right-from-bracket"></i></div>
+                <div class="menu-text">
+                    <h4 style="color: var(--danger);">Logout</h4>
+                    <p>အကောင့်မှ ထွက်ရန်</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TOOLS TAB CONTENT -->
+        <div id="toolsTabContent" class="menu-list" style="display: none;">
+            <div class="menu-item" onclick="openScreen('expiredCodesScreen')">
+                <div class="menu-icon"><i class="fa-solid fa-trash-can"></i></div>
+                <div class="menu-text">
+                    <h4>သက်တမ်းကုန် ကုတ်များ</h4>
+                    <p>သက်တမ်းကုန်ကုတ်များ ဖျက်ရန်</p>
+                </div>
+            </div>
+
+            <div class="menu-item" onclick="openScreen('contactScreen')">
+                <div class="menu-icon"><i class="fa-solid fa-address-book"></i></div>
+                <div class="menu-text">
+                    <h4>Contact</h4>
+                    <p>ဆက်သွယ်ရန်</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SUB SCREENS (MODALS) -->
+
+    <!-- PRINT SETTING SCREEN -->
+    <div id="printSettingScreen" class="sub-screen">
+        <div class="screen-header">
+            <div class="screen-title-area">
+                <button class="back-btn" onclick="closeScreen('printSettingScreen')"><i class="fa-solid fa-arrow-left"></i></button>
+                <h3>Print Setting</h3>
+            </div>
+        </div>
+        <div class="screen-body">
+            <div class="form-group">
+                <label>WiFi Name</label>
+                <input type="text" id="settingWifiName" class="form-control" value="Moe Kaung Kin WiFi">
+            </div>
+
+            <div class="form-group">
+                <label>Slip Style</label>
+                <div class="slip-grid">
+                    <div class="slip-card selected" id="slip1" onclick="selectSlipStyle(1)">
+                        <h5>Style 1</h5>
+                        <div class="slip-preview">
+                            ----------------<br>
+                            | wifi name : <span class="prevWifi">Moe Kaung Kin WiFi</span><br>
+                            | profile : 500Ks<br>
+                            | voucher : <b>abc123</b><br>
+                            ----------------
+                        </div>
+                    </div>
+                    <div class="slip-card" id="slip2" onclick="selectSlipStyle(2)">
+                        <h5>Style 2</h5>
+                        <div class="slip-preview" style="text-align: center;">
+                            <span class="prevWifi">Moe Kaung Kin WiFi</span><br>
+                            - 500Ks -<br>
+                            <b>abc123</b>
+                        </div>
+                    </div>
+                    <div class="slip-card" id="slip3" onclick="selectSlipStyle(3)">
+                        <h5>Style 3</h5>
+                        <div class="slip-preview">
+                            wifi : <span class="prevWifi">Moe Kaung Kin WiFi</span><br>
+                            profile : 500Ks<br>
+                            voucher : <b>abc123</b>
+                        </div>
+                    </div>
+                    <div class="slip-card" id="slip4" onclick="selectSlipStyle(4)">
+                        <h5>Style 4</h5>
+                        <div class="slip-preview" style="text-align: center;">
+                            ----------------<br>
+                            500Ks: <b>abc123</b><br>
+                            ----------------
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Paper Size</label>
+                <select id="settingPaperSize" class="form-control">
+                    <option value="58mm">58 mm</option>
+                    <option value="80mm">80 mm</option>
+                </select>
+            </div>
+
+            <button class="btn-primary" onclick="savePrintSettings()">Save</button>
+        </div>
+    </div>
+
+    <!-- REVENUE SCREEN -->
+    <div id="revenueScreen" class="sub-screen">
+        <div class="screen-header">
+            <div class="screen-title-area">
+                <button class="back-btn" onclick="closeScreen('revenueScreen')"><i class="fa-solid fa-arrow-left"></i></button>
+                <h3>Revenue</h3>
+            </div>
+        </div>
+        <div class="screen-body">
+            <div class="revenue-header-bar">
+                <div class="revenue-date">
+                    <span id="revDateText">27/10/2026</span>
+                    <i class="fa-solid fa-calendar-days" style="color: var(--accent-light-blue); cursor: pointer;" onclick="document.getElementById('revDatePicker').click()"></i>
+                    <input type="date" id="revDatePicker" style="display: none;" onchange="updateRevenueDate(this.value)">
+                </div>
+                <div class="revenue-total">
+                    စုစုပေါင်း ဝင်ငွေ: <span id="revTotalText">44,500Ks</span>
+                </div>
+            </div>
+
+            <div id="revenueListContainer">
+                <!-- Group Rates Items -->
+            </div>
+
+            <button class="btn-primary" style="margin-top: 20px;" onclick="saveRevenuePrices()">Save</button>
+        </div>
+    </div>
+
+    <!-- EXPIRED CODES SCREEN -->
+    <div id="expiredCodesScreen" class="sub-screen">
+        <div class="screen-header">
+            <div class="screen-title-area">
+                <button class="back-btn" onclick="closeScreen('expiredCodesScreen')"><i class="fa-solid fa-arrow-left"></i></button>
+                <h3>သက်တမ်းကုန် ကုတ်များ</h3>
+            </div>
+        </div>
+        <div class="screen-body">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <span style="font-size: 15px; color: var(--text-sub);">သက်တမ်းကုန် : <b id="expiredCountText" style="color: white;">3</b></span>
+                <button style="padding: 8px 16px; background-color: #f1f5f9; color: #0f172a; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;" onclick="clearAllExpiredVouchers()">ဖျက်မယ်</button>
+            </div>
+
+            <div id="expiredVouchersList">
+                <!-- Expired List Items -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN GMAIL AUTHORIZATION SCREEN -->
+    <div id="adminScreen" class="sub-screen">
+        <div class="screen-header" style="background-color: var(--accent-purple);">
+            <div class="screen-title-area">
+                <button class="back-btn" onclick="closeScreen('adminScreen')"><i class="fa-solid fa-arrow-left"></i></button>
+                <h3>Admin (Gmail ခွင့်ပြုရန်)</h3>
+            </div>
+        </div>
+        <div class="screen-body">
+            <div class="form-group">
+                <label>ခွင့်ပြုမည့် Gmail ထည့်ပါ</label>
+                <div style="display: flex; gap: 8px;">
+                    <input type="email" id="newAllowGmail" class="form-control" placeholder="user@gmail.com">
+                    <button class="btn-primary" style="width: auto; padding: 0 20px;" onclick="addAllowedGmail()">Add</button>
+                </div>
+            </div>
+
+            <h4 style="font-size: 14px; color: var(--text-sub); margin-bottom: 12px;">ခွင့်ပြုထားသော Gmail များ စာရင်း</h4>
+            <div id="allowedGmailList">
+                <!-- Allowed Gmail Items -->
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTACT SCREEN -->
+    <div id="contactScreen" class="sub-screen">
+        <div class="screen-header">
+            <div class="screen-title-area">
+                <button class="back-btn" onclick="closeScreen('contactScreen')"><i class="fa-solid fa-arrow-left"></i></button>
+                <h3>Contact ဆက်သွယ်ရန်</h3>
+            </div>
+        </div>
+        <div class="screen-body">
+            <div class="menu-list">
+                <a href="https://t.me/AungPhyThein" target="_blank" class="menu-item" style="text-decoration: none;">
+                    <div class="menu-icon" style="color: #229ED9; background: rgba(34, 158, 217, 0.1);"><i class="fa-brands fa-telegram"></i></div>
+                    <div class="menu-text">
+                        <h4>Telegram Account</h4>
+                        <p>@AungPhyThein</p>
+                    </div>
+                </a>
+                <a href="https://facebook.com/" target="_blank" class="menu-item" style="text-decoration: none;">
+                    <div class="menu-icon" style="color: #1877F2; background: rgba(24, 119, 242, 0.1);"><i class="fa-brands fa-facebook"></i></div>
+                    <div class="menu-text">
+                        <h4>Facebook Account</h4>
+                        <p>Aung Phy Thein</p>
+                    </div>
+                </a>
+                <div class="menu-item">
+                    <div class="menu-icon" style="color: #10B981; background: rgba(16, 185, 129, 0.1);"><i class="fa-solid fa-phone"></i></div>
+                    <div class="menu-text">
+                        <h4>Phone Number</h4>
+                        <p>09-XXXXXXXXX</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONNECTED DEVICES SCREEN -->
+    <div id="connectedDevicesScreen" class="sub-screen">
+        <div class="screen-header">
+            <div class="screen-title-area">
+                <button class="back-btn" onclick="closeScreen('connectedDevicesScreen')"><i class="fa-solid fa-arrow-left"></i></button>
+                <h3>Connected Devices</h3>
+            </div>
+        </div>
+        <div class="screen-body">
+            <div class="list-card">
+                <div>
+                    <h4 style="font-size: 15px;">Redmi Note 12</h4>
+                    <p style="font-size: 12px; color: var(--text-sub);">IP: 192.168.110.45 | MAC: C4:A3:9A:12:88:F1</p>
+                </div>
+                <button style="padding: 6px 12px; background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer;" onclick="addToBlacklist('Redmi Note 12', 'C4:A3:9A:12:88:F1')">Block</button>
+            </div>
+            <div class="list-card">
+                <div>
+                    <h4 style="font-size: 15px;">Galaxy A54</h4>
+                    <p style="font-size: 12px; color: var(--text-sub);">IP: 192.168.110.89 | MAC: 8A:11:BC:44:99:02</p>
+                </div>
+                <button style="padding: 6px 12px; background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer;" onclick="addToBlacklist('Galaxy A54', '8A:11:BC:44:99:02')">Block</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- BLACKLIST DEVICES SCREEN -->
+    <div id="blacklistScreen" class="sub-screen">
+        <div class="screen-header">
+            <div class="screen-title-area">
+                <button class="back-btn" onclick="closeScreen('blacklistScreen')"><i class="fa-solid fa-arrow-left"></i></button>
+                <h3>BlackList Devices</h3>
+            </div>
+        </div>
+        <div class="screen-body" id="blacklistContainer">
+            <!-- Dynamic Blacklist -->
+        </div>
+    </div>
+
+    <!-- VOUCHER MANAGER SCREEN -->
+    <div id="voucherManagerScreen" class="sub-screen">
+        <div class="screen-header">
+            <div class="screen-title-area">
+                <button class="back-btn" onclick="closeScreen('voucherManagerScreen')"><i class="fa-solid fa-arrow-left"></i></button>
+                <h3>Voucher Manager</h3>
+            </div>
+        </div>
+        <div class="screen-body">
+            <div class="form-group">
+                <label>Select User Group Profile</label>
+                <select id="voucherProfileSelect" class="form-control">
+                    <option value="500">500Ks Package</option>
+                    <option value="1000">1000Ks Package</option>
+                    <option value="5000">5000Ks Package</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Quantity (အရေအတွက်)</label>
+                <input type="number" id="voucherQty" class="form-control" value="1" min="1" max="50">
+            </div>
+            <button class="btn-primary" onclick="generateAndPrintVoucher()"><i class="fa-solid fa-print"></i> Generate & Print Slip</button>
+        </div>
+    </div>
+
+</div>
 
 <script>
-const KEY="CFBS_DIGITAL_EXAM_V1";
+    // -------------------------------------------------------------
+    // INITIAL APP STATE & STORAGE DATA
+    // -------------------------------------------------------------
+    const ADMIN_GMAIL = "admin@gmail.com";
+    
+    let defaultAllowedGmails = ["admin@gmail.com", "myatnoe@gmail.com", "aung@gmail.com"];
+    let allowedGmails = JSON.parse(localStorage.getItem('vm_allowed_gmails')) || defaultAllowedGmails;
 
-let db=JSON.parse(localStorage.getItem(KEY)||'{"students":[],"subjects":[],"exams":[],"results":[]}');
+    let printSettings = JSON.parse(localStorage.getItem('vm_print_settings')) || {
+        wifiName: "Moe Kaung Kin WiFi",
+        style: 1,
+        paperSize: "58mm"
+    };
 
-function saveDB(){
- localStorage.setItem(KEY,JSON.stringify(db));
- updateDashboard();
-}
+    let userGroupRates = JSON.parse(localStorage.getItem('vm_user_rates')) || [
+        { id: '5000', name: '5000Ks', cards: 1, price: 5000 },
+        { id: '30000', name: '30000Ks', cards: 0, price: 30000 },
+        { id: '20000', name: '20000Ks', cards: 0, price: 20000 },
+        { id: '10000', name: '10000Ks', cards: 0, price: 10000 },
+        { id: '1000', name: '1000Ks', cards: 14, price: 1000 },
+        { id: '500', name: '500Ks', cards: 51, price: 500 }
+    ];
 
-function showPage(id,btn){
- document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
- document.getElementById(id).classList.add('active');
- document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
- btn.classList.add('active');
- renderAll();
-}
+    let expiredVouchers = JSON.parse(localStorage.getItem('vm_expired_vouchers')) || [
+        { code: '640343125', profile: '500' },
+        { code: '311301672', profile: '500' },
+        { code: '225554021', profile: '1000' }
+    ];
 
-function updateDashboard(){
- studentCount.textContent=db.students.length;
- examCount.textContent=db.exams.length;
- subjectCount.textContent=db.subjects.length;
- resultCount.textContent=db.results.length;
-}
+    let blacklistDevices = JSON.parse(localStorage.getItem('vm_blacklist')) || [
+        { name: 'Unknown Device', mac: 'AA:BB:CC:11:22:33' }
+    ];
 
-function addStudent(){
- let name=sName.value.trim(),id=sId.value.trim(),grade=sGrade.value,combo=sCombo.value;
- if(!name||!id||!grade)return alert("အချက်အလက်ပြည့်စုံစွာထည့်ပါ");
- if(db.students.some(s=>s.id===id))return alert("Student ID ရှိပြီးသားဖြစ်သည်");
- db.students.push({name,id,grade,combo});
- saveDB();renderAll();
- sName.value="";sId.value="";sGrade.value="";sCombo.value="";
-}
+    let currentUser = JSON.parse(localStorage.getItem('vm_current_user')) || null;
 
-function deleteStudent(id){
- if(!confirm("ကျောင်းသားကို ဖျက်မှာသေချာပါသလား"))return;
- db.students=db.students.filter(s=>s.id!==id);
- saveDB();renderAll();
-}
+    // -------------------------------------------------------------
+    // LIFECYCLE & INITIALIZATION
+    // -------------------------------------------------------------
+    window.onload = function() {
+        if (currentUser) {
+            verifyAndLoadApp(currentUser);
+        } else {
+            document.getElementById('authScreen').style.display = 'flex';
+        }
+        applyPrintSettingsUI();
+        renderRevenueUI();
+        renderExpiredVouchers();
+        renderBlacklistUI();
+        renderAllowedGmailsUI();
+    };
 
-function addSubject(){
- let grade=subGrade.value,name=subName.value.trim();
- if(!name)return alert("ဘာသာရပ်အမည်ထည့်ပါ");
- if(db.subjects.some(s=>s.grade===grade&&s.name===name))return alert("ဘာသာရပ်ရှိပြီးသားပါ");
- db.subjects.push({grade,name});
- saveDB();renderAll();subName.value="";
-}
+    // -------------------------------------------------------------
+    // AUTHENTICATION LOGIC (ADMIN & CUSTOMER LICENSE CONTROL)
+    // -------------------------------------------------------------
+    function handleLogin(e) {
+        e.preventDefault();
+        const gmail = document.getElementById('loginGmail').value.trim().toLowerCase();
+        const ruijieUser = document.getElementById('loginRuijieUser').value.trim();
+        const ruijiePass = document.getElementById('loginRuijiePass').value.trim();
+        const alertBox = document.getElementById('authAlert');
 
-function deleteSubject(index){
- db.subjects.splice(index,1);saveDB();renderAll();
-}
+        // Check if Gmail is in Authorized List
+        if (!allowedGmails.includes(gmail)) {
+            alertBox.style.display = 'block';
+            alertBox.innerText = "❌ ခွင့်ပြုချက်မရှိသော Gmail ဖြစ်ပါသည်! Admin ဆီသို့ အကောင့်ဖွင့်ခွင့် တောင်းဆိုပါ။";
+            return;
+        }
 
-let questions=[];
+        // Save session
+        currentUser = {
+            gmail: gmail,
+            ruijieUser: ruijieUser,
+            isAdmin: (gmail === ADMIN_GMAIL)
+        };
+        localStorage.setItem('vm_current_user', JSON.stringify(currentUser));
 
-function addQuestion(){
- questions.push({text:"",marks:1,options:["","","",""],answer:0});
- renderQuestions();
-}
+        alertBox.style.display = 'none';
+        verifyAndLoadApp(currentUser);
+    }
 
-function renderQuestions(){
- questionList.innerHTML="";
- questions.forEach((q,i)=>{
- let div=document.createElement("div");
- div.className="question";
- div.innerHTML=`
- <strong>မေးခွန်း ${i+1}</strong>
- <label>မေးခွန်းစာသား</label>
- <textarea rows="2" placeholder="မေးခွန်းရေးပါ"></textarea>
- <label>အမှတ်</label>
- <input type="number" min="0" step="0.5" value="${q.marks}">
- <label>အဖြေရွေးချယ်စရာ (လိုအပ်ပါက)</label>
- ${[0,1,2,3].map(n=>`<input placeholder="အဖြေ ${n+1}" value="${q.options[n]}">`).join("")}
- <label>အဖြေမှန်</label>
- <select>
- <option value="0">အဖြေ ၁</option>
- <option value="1">အဖြေ ၂</option>
- <option value="2">အဖြေ ၃</option>
- <option value="3">အဖြေ ၄</option>
- </select>
- <button class="btn red">ဖယ်ရှားရန်</button>`;
- let inputs=div.querySelectorAll("textarea,input,select");
- inputs[0].value=q.text;
- inputs[1].value=q.marks;
- [2,3,4,5].forEach((n,j)=>inputs[n].value=q.options[j]);
- inputs[6].value=q.answer;
- inputs[0].oninput=e=>q.text=e.target.value;
- inputs[1].oninput=e=>{q.marks=Math.max(0,Number(e.target.value)||0);updateQuestionTotal()};
- [2,3,4,5].forEach((n,j)=>inputs[n].oninput=e=>q.options[j]=e.target.value);
- inputs[6].onchange=e=>q.answer=Number(e.target.value);
- div.querySelector("button").onclick=()=>{questions.splice(i,1);renderQuestions()};
- questionList.appendChild(div);
- });
- updateQuestionTotal();
-}
+    function verifyAndLoadApp(user) {
+        // Double check authorization
+        if (!allowedGmails.includes(user.gmail)) {
+            handleLogout();
+            alert("သင်၏ အသုံးပြုခွင့်အား Admin မှ ပြန်လည်ပိတ်သိမ်းလိုက်ပါပြီ!");
+            return;
+        }
 
-function updateQuestionTotal(){
- qCount.textContent=questions.length;
- totalMarks.textContent=questions.reduce((a,q)=>a+Number(q.marks||0),0);
-}
+        document.getElementById('authScreen').style.display = 'none';
+        document.getElementById('displayProjectName').innerText = user.ruijieUser;
 
-function saveExam(){
- let type=examType.value,grade=examGrade.value,subject=examSubject.value.trim(),time=Number(examTime.value);
- if(!subject||!questions.length||!time)return alert("စာမေးပွဲအချက်အလက်နှင့် မေးခွန်းများထည့်ပါ");
- if(questions.some(q=>!q.text.trim()||Number(q.marks)<=0))return alert("မေးခွန်းစာသားနှင့် အမှတ်ကို စစ်ဆေးပါ");
- let exam={
- id:Date.now(),type,grade,subject,time,
- questions:JSON.parse(JSON.stringify(questions)),
- total:questions.reduce((a,q)=>a+Number(q.marks),0)
- };
- db.exams.push(exam);
- saveDB();questions=[];renderQuestions();renderAll();
- alert("စာမေးပွဲသိမ်းပြီးပါပြီ");
-}
+        // Toggle Admin UI Menu Item
+        const adminMenu = document.getElementById('adminOnlyMenuItem');
+        if (user.isAdmin) {
+            adminMenu.style.display = 'flex';
+        } else {
+            adminMenu.style.display = 'none';
+        }
+    }
 
-function deleteExam(id){
- if(!confirm("စာမေးပွဲဖျက်မှာသေချာပါသလား"))return;
- db.exams=db.exams.filter(e=>e.id!==id);
- saveDB();renderAll();
-}
+    function handleLogout() {
+        localStorage.removeItem('vm_current_user');
+        currentUser = null;
+        document.getElementById('authScreen').style.display = 'flex';
+    }
 
-function loadResultStudents(){
- let id=Number(resultExam.value);
- let exam=db.exams.find(e=>e.id===id);
- let students=db.students.filter(s=>s.grade===exam?.grade);
- resultStudent.innerHTML=students.map(s=>`<option value="${s.id}">${s.name} (${s.id})</option>`).join("");
- scoreInputs.innerHTML="";
- if(!exam)return;
- exam.questions.forEach((q,i)=>{
- let div=document.createElement("div");
- div.className="question";
- div.innerHTML=`<strong>${i+1}. ${escapeHTML(q.text)}</strong>
- <p class="small">အမှတ်ပြည့် ${q.marks}</p>
- <label>ရမှတ်</label>
- <input type="number" min="0" max="${q.marks}" step="0.5" value="0">`;
- div.querySelector("input").dataset.index=i;
- scoreInputs.appendChild(div);
- });
-}
+    // -------------------------------------------------------------
+    // NAVIGATION
+    // -------------------------------------------------------------
+    function switchMainTab(tab) {
+        const homeBtn = document.getElementById('tabHomeBtn');
+        const toolsBtn = document.getElementById('tabToolsBtn');
+        const homeContent = document.getElementById('homeTabContent');
+        const toolsContent = document.getElementById('toolsTabContent');
 
-function saveResult(){
- let exam=db.exams.find(e=>e.id===Number(resultExam.value));
- let student=db.students.find(s=>s.id===resultStudent.value);
- if(!exam||!student)return alert("စာမေးပွဲနှင့် ကျောင်းသားရွေးပါ");
- let scores=[...scoreInputs.querySelectorAll("input")].map((input,i)=>{
- let value=Number(input.value);
- if(value<0||value>exam.questions[i].marks)throw new Error("ရမှတ်သည် အမှတ်ပြည့်ထက် မကျော်ရပါ");
- return value;
- });
- let score=scores.reduce((a,b)=>a+b,0);
- let percent=exam.total?score/exam.total*100:0;
- let grade=percent>=80?"A":percent>=60?"B":percent>=40?"C":"D";
- db.results=db.results.filter(r=>!(r.examId===exam.id&&r.studentId===student.id));
- db.results.push({examId:exam.id,studentId:student.id,scores,score,total:exam.total,percent,grade});
- saveDB();renderAll();alert("ရလဒ်သိမ်းပြီးပါပြီ");
-}
+        if (tab === 'home') {
+            homeBtn.classList.add('active');
+            toolsBtn.classList.remove('active');
+            homeContent.style.display = 'flex';
+            toolsContent.style.display = 'none';
+        } else {
+            toolsBtn.classList.add('active');
+            homeBtn.classList.remove('active');
+            toolsContent.style.display = 'flex';
+            homeContent.style.display = 'none';
+        }
+    }
 
-function escapeHTML(str){
- return String(str).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
+    function openScreen(id) {
+        document.getElementById(id).classList.add('active');
+    }
 
-function renderAll(){
- studentTable.innerHTML=db.students.map(s=>`
- <tr><td>${escapeHTML(s.id)}</td><td>${escapeHTML(s.name)}</td>
- <td>${escapeHTML(s.grade)}</td><td>${s.combo||"-"}</td>
- <td><button class="btn red" onclick="deleteStudent('${s.id}')">ဖျက်</button></td></tr>`).join("");
+    function closeScreen(id) {
+        document.getElementById(id).classList.remove('active');
+    }
 
- subjectList.innerHTML=db.subjects.map((s,i)=>`
- <p>${escapeHTML(s.grade)} — ${escapeHTML(s.name)}
- <button class="btn red" onclick="deleteSubject(${i})">ဖျက်</button></p>`).join("");
+    // -------------------------------------------------------------
+    // PRINT SETTINGS
+    // -------------------------------------------------------------
+    function selectSlipStyle(styleNum) {
+        printSettings.style = styleNum;
+        for (let i = 1; i <= 4; i++) {
+            document.getElementById('slip' + i).classList.remove('selected');
+        }
+        document.getElementById('slip' + styleNum).classList.add('selected');
+    }
 
- examList.innerHTML=db.exams.map(e=>`
- <div class="question">
- <strong>${escapeHTML(e.type)} - ${escapeHTML(e.grade)}</strong>
- ${escapeHTML(e.subject)}<br>
- မေးခွန်း ${e.questions.length} ပုဒ် | အမှတ် ${e.total} | ${e.time} မိနစ်
- <br><button class="btn red" onclick="deleteExam(${e.id})">ဖျက်</button>
- </div>`).join("");
+    function applyPrintSettingsUI() {
+        document.getElementById('settingWifiName').value = printSettings.wifiName;
+        document.getElementById('settingPaperSize').value = printSettings.paperSize;
+        selectSlipStyle(printSettings.style);
 
- resultExam.innerHTML=db.exams.map(e=>`
- <option value="${e.id}">${escapeHTML(e.type)} - ${escapeHTML(e.grade)} - ${escapeHTML(e.subject)}</option>`).join("");
+        const prevElements = document.getElementsByClassName('prevWifi');
+        for (let el of prevElements) {
+            el.innerText = printSettings.wifiName;
+        }
+    }
 
- resultTable.innerHTML=db.results.map(r=>{
- let s=db.students.find(x=>x.id===r.studentId);
- let e=db.exams.find(x=>x.id===r.examId);
- if(!s||!e)return "";
- return `<tr><td>${escapeHTML(s.name)}</td><td>${s.grade}</td>
- <td>${escapeHTML(e.type)} / ${escapeHTML(e.subject)}</td>
- <td>${r.score}/${r.total}</td><td>${r.percent.toFixed(1)}%</td><td>${r.grade}</td></tr>`;
- }).join("");
+    function savePrintSettings() {
+        printSettings.wifiName = document.getElementById('settingWifiName').value.trim() || "WiFi Name";
+        printSettings.paperSize = document.getElementById('settingPaperSize').value;
+        localStorage.setItem('vm_print_settings', JSON.stringify(printSettings));
+        
+        applyPrintSettingsUI();
+        alert("Print Settings များကို အောင်မြင်စွာ သိမ်းဆည်းပြီးပါပြီ!");
+        closeScreen('printSettingScreen');
+    }
 
- updateDashboard();
-}
+    // -------------------------------------------------------------
+    // REVENUE TRACKER LOGIC
+    // -------------------------------------------------------------
+    function renderRevenueUI() {
+        const container = document.getElementById('revenueListContainer');
+        container.innerHTML = '';
+        let grandTotal = 0;
 
-function backupData(){
- let blob=new Blob([JSON.stringify(db,null,2)],{type:"application/json"});
- let url=URL.createObjectURL(blob);
- let a=document.createElement("a");
- a.href=url;a.download="CFBS_Exam_Backup.json";a.click();
- URL.revokeObjectURL(url);
-}
+        userGroupRates.forEach((item, index) => {
+            const rowTotal = item.cards * item.price;
+            grandTotal += rowTotal;
 
-function restoreData(){
- let file=restoreFile.files[0];
- if(!file)return alert("Backup ဖိုင်ရွေးပါ");
- let reader=new FileReader();
- reader.onload=()=>{
- try{
- let data=JSON.parse(reader.result);
- if(!Array.isArray(data.students)||!Array.isArray(data.exams)||
- !Array.isArray(data.subjects)||!Array.isArray(data.results))throw Error();
- db=data;saveDB();renderAll();alert("Restore အောင်မြင်ပါသည်");
- }catch(e){alert("Backup ဖိုင်မမှန်ပါ");}
- };
- reader.readAsText(file);
-}
+            const div = document.createElement('div');
+            div.className = 'revenue-row';
+            div.innerHTML = `
+                <div class="revenue-info">
+                    <h4>${item.name}</h4>
+                    <p>${item.cards}cards × ${item.price.toLocaleString()} = ${rowTotal.toLocaleString()}Ks</p>
+                </div>
+                <input type="number" class="price-input" value="${item.price}" onchange="updateGroupPrice(${index}, this.value)">
+            `;
+            container.appendChild(div);
+        });
 
-function clearAll(){
- if(!confirm("Data အားလုံးကို အပြီးဖျက်မှာ သေချာပါသလား"))return;
- db={students:[],subjects:[],exams:[],results:[]};
- saveDB();renderAll();
-}
+        document.getElementById('revTotalText').innerText = grandTotal.toLocaleString() + 'Ks';
+    }
 
-addQuestion();
-renderAll();
+    function updateGroupPrice(index, val) {
+        userGroupRates[index].price = parseInt(val) || 0;
+    }
+
+    function saveRevenuePrices() {
+        localStorage.setItem('vm_user_rates', JSON.stringify(userGroupRates));
+        renderRevenueUI();
+        alert("Revenue ဈေးနှုန်းများကို သိမ်းဆည်းပြီးပါပြီ!");
+        closeScreen('revenueScreen');
+    }
+
+    function updateRevenueDate(val) {
+        if (!val) return;
+        const d = new Date(val);
+        const formatted = String(d.getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0') + '/' + d.getFullYear();
+        document.getElementById('revDateText').innerText = formatted;
+    }
+
+    // -------------------------------------------------------------
+    // EXPIRED VOUCHERS LOGIC
+    // -------------------------------------------------------------
+    function renderExpiredVouchers() {
+        const container = document.getElementById('expiredVouchersList');
+        document.getElementById('expiredCountText').innerText = expiredVouchers.length;
+        container.innerHTML = '';
+
+        expiredVouchers.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'list-card';
+            div.innerHTML = `
+                <div>
+                    <h4 style="color: #ef4444; font-size: 16px;">${item.code}</h4>
+                    <p style="font-size: 12px; color: var(--text-sub);">${item.profile}</p>
+                </div>
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    function clearAllExpiredVouchers() {
+        if (expiredVouchers.length === 0) {
+            alert("ဖျက်ရန် သက်တမ်းကုန်ကုတ် မရှိပါ!");
+            return;
+        }
+        if (confirm("သက်တမ်းကုန် ကုတ်များအားလုံးကို ဖျက်ရန် သေချာပါသလား?")) {
+            expiredVouchers = [];
+            localStorage.setItem('vm_expired_vouchers', JSON.stringify(expiredVouchers));
+            renderExpiredVouchers();
+            alert("သက်တမ်းကုန် ကုတ်များအားလုံး ရှင်းလင်းပြီးပါပြီ!");
+        }
+    }
+
+    // -------------------------------------------------------------
+    // ADMIN GMAIL AUTHORIZATION
+    // -------------------------------------------------------------
+    function renderAllowedGmailList() {
+        renderAllowedGmailsUI();
+    }
+
+    function renderAllowedGmailsUI() {
+        const container = document.getElementById('allowedGmailList');
+        container.innerHTML = '';
+
+        allowedGmails.forEach((gmail, idx) => {
+            const div = document.createElement('div');
+            div.className = 'list-card';
+            div.innerHTML = `
+                <div>
+                    <h4 style="font-size: 14px;">${gmail}</h4>
+                    ${gmail === ADMIN_GMAIL ? '<span class="badge badge-success">Admin</span>' : '<span class="badge badge-success">Authorized</span>'}
+                </div>
+                ${gmail !== ADMIN_GMAIL ? `<button style="padding: 4px 10px; background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: none; border-radius: 6px; font-size: 12px; cursor: pointer;" onclick="revokeGmail(${idx})">Revoke</button>` : ''}
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    function addAllowedGmail() {
+        const input = document.getElementById('newAllowGmail');
+        const email = input.value.trim().toLowerCase();
+        if (!email) return;
+
+        if (allowedGmails.includes(email)) {
+            alert("ဒီ Gmail က ခွင့်ပြုပြီးသား ဖြစ်ပါတယ်!");
+            return;
+        }
+
+        allowedGmails.push(email);
+        localStorage.setItem('vm_allowed_gmails', JSON.stringify(allowedGmails));
+        input.value = '';
+        renderAllowedGmailsUI();
+        alert("Gmail အား အသုံးပြုခွင့် ခွင့်ပြုလိုက်ပါပြီ!");
+    }
+
+    function revokeGmail(idx) {
+        if (confirm("ဒီ Gmail ၏ အသုံးပြုခွင့်ကို ပိတ်ပင်ရန် သေချာပါသလား?")) {
+            allowedGmails.splice(idx, 1);
+            localStorage.setItem('vm_allowed_gmails', JSON.stringify(allowedGmails));
+            renderAllowedGmailsUI();
+        }
+    }
+
+    // -------------------------------------------------------------
+    // BLACKLIST MANAGEMENT
+    // -------------------------------------------------------------
+    function renderBlacklistUI() {
+        const container = document.getElementById('blacklistContainer');
+        container.innerHTML = '';
+
+        blacklistDevices.forEach((dev, idx) => {
+            const div = document.createElement('div');
+            div.className = 'list-card';
+            div.innerHTML = `
+                <div>
+                    <h4 style="font-size: 15px;">${dev.name}</h4>
+                    <p style="font-size: 12px; color: var(--text-sub);">MAC: ${dev.mac}</p>
+                </div>
+                <button style="padding: 6px 12px; background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer;" onclick="removeFromBlacklist(${idx})">Unblock</button>
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    function addToBlacklist(name, mac) {
+        blacklistDevices.push({ name: name, mac: mac });
+        localStorage.setItem('vm_blacklist', JSON.stringify(blacklistDevices));
+        renderBlacklistUI();
+        alert(name + " အား Blacklist ထဲသို့ ထည့်သွင်းပြီးပါပြီ!");
+        closeScreen('connectedDevicesScreen');
+        openScreen('blacklistScreen');
+    }
+
+    function removeFromBlacklist(idx) {
+        blacklistDevices.splice(idx, 1);
+        localStorage.setItem('vm_blacklist', JSON.stringify(blacklistDevices));
+        renderBlacklistUI();
+    }
+
+    // -------------------------------------------------------------
+    // VOUCHER GENERATE SIMULATION
+    // -------------------------------------------------------------
+    function generateAndPrintVoucher() {
+        const profile = document.getElementById('voucherProfileSelect').value;
+        const qty = document.getElementById('voucherQty').value;
+        const randomCode = Math.floor(100000000 + Math.random() * 900000000);
+
+        alert(`🖨️ Voucher Slip ထွက်ရှိလာပါပြီ!\n------------------\nWiFi: ${printSettings.wifiName}\nProfile: ${profile}Ks\nCode: ${randomCode}\nPaper: ${printSettings.paperSize}`);
+        closeScreen('voucherManagerScreen');
+    }
 </script>
+
 </body>
 </html>
