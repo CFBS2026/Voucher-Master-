@@ -170,116 +170,298 @@ class PendingPage extends StatelessWidget {
   ));
 }
 
+
 class DashboardPage extends StatefulWidget {
   final bool isAdmin;
   final String displayName;
-  const DashboardPage({super.key, required this.isAdmin, required this.displayName});
-  @override State<DashboardPage> createState() => _DashboardPageState();
+
+  const DashboardPage({
+    super.key,
+    required this.isAdmin,
+    required this.displayName,
+  });
+
+  @override
+  State<DashboardPage> createState() => _DashboardPageState();
 }
+
 class _DashboardPageState extends State<DashboardPage> {
   List<Map<String, dynamic>> projects = [];
   String? projectId;
   bool loading = true;
-  @override void initState() { super.initState(); loadProjects(); }
+
+  @override
+  void initState() {
+    super.initState();
+    loadProjects();
+  }
+
   Future<void> loadProjects() async {
     try {
-      final result = await supabase.from('projects').select('id,name').order('created_at');
+      final result = await supabase
+          .from('projects')
+          .select('id,name')
+          .order('created_at');
+
       projects = List<Map<String, dynamic>>.from(result);
-      if (projects.isNotEmpty) projectId ??= projects.first['id'].toString();
+
+      if (projects.isNotEmpty) {
+        projectId ??= projects.first['id'].toString();
+      }
     } catch (_) {}
-    if (mounted) setState(() => loading = false);
-  }
-  Future<void> addProject() async {
-    final name = TextEditingController();
-    final yes = await showDialog<bool>(context: context, builder: (c) =>
-      AlertDialog(title: const Text('Project အသစ်'),
-        content: TextField(controller: name, decoration: const InputDecoration(labelText: 'Project Name')),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(c, false), child: const Text('Cancel')),
-          FilledButton(onPressed: () => Navigator.pop(c, true), child: const Text('Save')),
-        ]));
-    if (yes == true && name.text.trim().isNotEmpty) {
-      try {
-        final row = await supabase.from('projects').insert({
-          'name': name.text.trim(), 'owner_id': supabase.auth.currentUser!.id
-        }).select('id').single();
-        projectId = row['id'].toString();
-        await loadProjects();
-      } catch (e) { toast('Project သိမ်းမရပါ: $e'); }
+
+    if (mounted) {
+      setState(() => loading = false);
     }
   }
-  void toast(String s) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(s)));
+
+  Future<void> addProject() async {
+    final name = TextEditingController();
+
+    final yes = await showDialog<bool>(
+      context: context,
+      builder: (c) => AlertDialog(
+        title: const Text('Project အသစ်'),
+        content: TextField(
+          controller: name,
+          decoration: const InputDecoration(
+            labelText: 'Project Name',
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(c, false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(c, true),
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    );
+
+    if (yes == true && name.text.trim().isNotEmpty) {
+      try {
+        final row = await supabase
+            .from('projects')
+            .insert({
+              'name': name.text.trim(),
+              'owner_id': supabase.auth.currentUser!.id,
+            })
+            .select('id')
+            .single();
+
+        projectId = row['id'].toString();
+        await loadProjects();
+      } catch (e) {
+        toast('Project သိမ်းမရပါ: $e');
+      }
+    }
+
+    name.dispose();
+  }
+
+  void toast(String s) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(s)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final modules = [
-      ('Voucher Manager', 'Voucher Code များ စီမံခန့်ခွဲခြင်း', Icons.confirmation_number, 'vouchers'),
-      ('Connected Devices', 'ချိတ်ဆက်ထားသော ဖုန်းများ', Icons.devices, 'connected_devices'),
-      ('Blacklist Devices', 'ပိတ်ပင်ထားသော ဖုန်းများ', Icons.block, 'blocked_devices'),
-      ('Print Setting', 'WiFi Name နှင့် Voucher Style', Icons.print, 'print_settings'),
-      ('Revenue', 'ဝင်ငွေစာရင်း', Icons.trending_up, 'revenue_entries'),
-      ('Top Traffic', 'အသုံးပြုမှု အများဆုံး Device များ', Icons.bar_chart, 'traffic_devices'),
+      ('Voucher Manager', 'Voucher Code များ စီမံခန့်ခွဲခြင်း',
+          Icons.confirmation_number, 'vouchers'),
+      ('Connected Devices', 'ချိတ်ဆက်ထားသော ဖုန်းများ',
+          Icons.devices, 'connected_devices'),
+      ('Blacklist Devices', 'ပိတ်ပင်ထားသော ဖုန်းများ',
+          Icons.block, 'blocked_devices'),
+      ('Print Setting', 'WiFi Name နှင့် Voucher Style',
+          Icons.print, 'print_settings'),
+      ('Revenue', 'ဝင်ငွေစာရင်း',
+          Icons.trending_up, 'revenue_entries'),
+      ('Top Traffic', 'အသုံးပြုမှု အများဆုံး Device များ',
+          Icons.bar_chart, 'traffic_devices'),
     ];
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Voucher Master Pro'),
-        actions: [IconButton(onPressed: () => supabase.auth.signOut(), icon: const Icon(Icons.logout))]),
-      body: loading ? const Center(child: CircularProgressIndicator()) :
-        RefreshIndicator(onRefresh: loadProjects, child: ListView(
-          padding: const EdgeInsets.all(16), children: [
-            Container(padding: const EdgeInsets.all(18),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(colors: [navy, blue]),
-                borderRadius: BorderRadius.circular(18)),
-              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                const Text('CONNECT • MANAGE • GROW',
-                  style: TextStyle(color: gold, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 6),
-                Text('Welcome, ${widget.displayName}',
-                  style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 12),
-                Row(children: [
-                  const Icon(Icons.folder_open, color: gold),
-                  const SizedBox(width: 8),
-                  Expanded(child: DropdownButton<String>(
-                    value: projects.any((p) => p['id'].toString() == projectId) ? projectId : null,
-                    isExpanded: true, dropdownColor: blue,
-                    style: const TextStyle(color: Colors.white),
-                    hint: const Text('Select Project', style: TextStyle(color: Colors.white)),
-                    items: projects.map((p) => DropdownMenuItem(
-                      value: p['id'].toString(), child: Text(p['name'].toString()))).toList(),
-                    onChanged: (v) => setState(() => projectId = v))),
-                  IconButton(onPressed: addProject, icon: const Icon(Icons.add_circle, color: gold)),
-                ]),
-              ]),
-            ),
-            const SizedBox(height: 14),
-            ...modules.map((m) => Card(child: ListTile(
-              leading: CircleAvatar(backgroundColor: blue,
-                child: Icon(m.$3, color: Colors.white)),
-              title: Text(m.$1, style: const TextStyle(fontWeight: FontWeight.bold)),
-              subtitle: Text(m.$2), trailing: const Icon(Icons.chevron_right),
-              onTap: () => Navigator.push(context, MaterialPageRoute(
-                builder: (_) => ModulePage(title: m.$1, table: m.$4, projectId: projectId)),
+      appBar: AppBar(
+        title: const Text('Voucher Master Pro'),
+        actions: [
+          IconButton(
+            onPressed: () => supabase.auth.signOut(),
+            icon: const Icon(Icons.logout),
+          ),
+        ],
+      ),
+      body: loading
+          ? const Center(child: CircularProgressIndicator())
+          : RefreshIndicator(
+              onRefresh: loadProjects,
+              child: ListView(
+                padding: const EdgeInsets.all(16),
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(18),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [navy, blue],
+                      ),
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'CONNECT • MANAGE • GROW',
+                          style: TextStyle(
+                            color: gold,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          'Welcome, ${widget.displayName}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            const Icon(Icons.folder_open, color: gold),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: DropdownButton<String>(
+                                value: projects.any(
+                                  (p) =>
+                                      p['id'].toString() == projectId,
+                                )
+                                    ? projectId
+                                    : null,
+                                isExpanded: true,
+                                dropdownColor: blue,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                                hint: const Text(
+                                  'Select Project',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                items: projects.map((p) {
+                                  return DropdownMenuItem(
+                                    value: p['id'].toString(),
+                                    child: Text(p['name'].toString()),
+                                  );
+                                }).toList(),
+                                onChanged: (v) {
+                                  setState(() => projectId = v);
+                                },
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: addProject,
+                              icon: const Icon(
+                                Icons.add_circle,
+                                color: gold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 14),
+
+                  ...modules.map(
+                    (m) => Card(
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: blue,
+                          child: Icon(m.$3, color: Colors.white),
+                        ),
+                        title: Text(
+                          m.$1,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        subtitle: Text(m.$2),
+                        trailing: const Icon(Icons.chevron_right),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => ModulePage(
+                                title: m.$1,
+                                table: m.$4,
+                                projectId: projectId,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+
+                  Card(
+                    child: ListTile(
+                      leading: const CircleAvatar(
+                        child: Icon(Icons.admin_panel_settings),
+                      ),
+                      title: const Text('Admin Approval'),
+                      subtitle: const Text(
+                        'Gmail account ခွင့်ပြု / ပိတ်သိမ်းရန်',
+                      ),
+                      onTap: () {
+                        if (!widget.isAdmin) {
+                          toast('Admin permission လိုအပ်ပါသည်။');
+                          return;
+                        }
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const AdminPage(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+
+                  Card(
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.delete_forever,
+                        color: Colors.red,
+                      ),
+                      title: const Text('Delete Expired Vouchers'),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => ModulePage(
+                              title: 'Expired Vouchers',
+                              table: 'vouchers',
+                              projectId: projectId,
+                              expiredOnly: true,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
-            ))),
-            Card(child: ListTile(
-              leading: const CircleAvatar(child: Icon(Icons.admin_panel_settings)),
-              title: const Text('Admin Approval'),
-              subtitle: const Text('Gmail account ခွင့်ပြု / ပိတ်သိမ်းရန်'),
-              onTap: () {
-                if (!widget.isAdmin) { toast('Admin permission လိုအပ်ပါသည်။'); return; }
-                Navigator.push(context, MaterialPageRoute(builder: (_) => const AdminPage()));
-              })),
-            Card(child: ListTile(
-              leading: const Icon(Icons.delete_forever, color: Colors.red),
-              title: const Text('Delete Expired Vouchers'),
-              onTap: () => Navigator.push(context, MaterialPageRoute(
-                builder: (_) => ModulePage(title: 'Expired Vouchers', table: 'vouchers',
-                  projectId: projectId, expiredOnly: true)))),
-          ],
-        )),
+            ),
     );
   }
 }
+
 
 class ModulePage extends StatefulWidget {
   final String title, table;
