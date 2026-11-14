@@ -32,6 +32,43 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Fix Bluetooth Printer Namespace
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          plugin = Path.home() / ".pub-cache/hosted/pub.dev/blue_thermal_printer-1.2.3/android"
+          gradle = plugin / "build.gradle"
+          manifest = plugin / "src/main/AndroidManifest.xml"
+
+          if not gradle.exists() or not manifest.exists():
+              raise SystemExit("Bluetooth printer plugin files not found")
+
+          content = manifest.read_text()
+          match = re.search(r'<manifest\b[^>]*\bpackage=["\']([^"\']+)', content)
+
+          if not match:
+              raise SystemExit("Cannot detect plugin package")
+
+          namespace = match.group(1)
+          build = gradle.read_text()
+
+          if not re.search(r'(?m)^\s*namespace\s+', build):
+              build, count = re.subn(
+                  r'(?m)^(\s*android\s*\{)',
+                  lambda m: m.group(1) + '\n    namespace "' + namespace + '"',
+                  build,
+                  count=1
+              )
+              if count == 0:
+                  raise SystemExit("Android block not found")
+
+              gradle.write_text(build)
+
+          print("Namespace configured:", namespace)
+          PY
+
       - name: Build APK
         run: flutter build apk --release
 
