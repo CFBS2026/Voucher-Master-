@@ -30,6 +30,35 @@ jobs:
       - name: Create Android Project
         run: |
           flutter create --platforms=android --org com.cfbs.vouchermaster .
+      
+      - name: Add Android Internet Permission
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path("android/app/src/main/AndroidManifest.xml")
+          s = p.read_text()
+
+          permissions = [
+              "android.permission.INTERNET",
+              "android.permission.ACCESS_NETWORK_STATE",
+          ]
+
+          for permission in permissions:
+              if permission not in s:
+                  tag = f'<uses-permission android:name="{permission}"/>'
+                  s = re.sub(
+                      r'(<manifest\b[^>]*>)',
+                      r'\1\n    ' + tag,
+                      s,
+                      count=1
+                  )
+
+          p.write_text(s)
+          print("Internet permissions added.")
+          PY
+
 
       - name: Install Dependencies
         run: |
