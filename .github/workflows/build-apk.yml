@@ -129,8 +129,15 @@ jobs:
           print("Namespace configured:", namespace)
           PY
 
+      
       - name: Build APK
-        run: flutter build apk --release
+        run: |
+          flutter build apk --release --verbose
+          echo "===== APK FILE CHECK ====="
+          find build android -type f -name "*.apk" -print || true
+          echo "===== BUILD OUTPUT ====="
+          ls -lah build/app/outputs/flutter-apk/ || true
+
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
