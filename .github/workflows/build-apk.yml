@@ -25,15 +25,20 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
+          cache: true
 
-      - name: Create Android project
-        run: flutter create --platforms=android --org com.cfbs.vouchermaster .
-      
-      - name: Disable Crashing Android Lint Task
+      - name: Create Android Project
+        run: |
+          flutter create --platforms=android --org com.cfbs.vouchermaster .
+
+      - name: Install Dependencies
+        run: |
+          flutter pub get
+
+      - name: Fix Android Lint
         run: |
           cat >> android/build.gradle <<'EOF'
 
-          // Workaround for Android Lint JavaDocParser crash
           subprojects {
               tasks.configureEach {
                   if (name == "lintVitalAnalyzeRelease") {
@@ -43,104 +48,100 @@ jobs:
           }
           EOF
 
-      - name: Install dependencies
-        run: flutter pub get
-        
-      - name: Fix Bluetooth Printer Android SDK
+      - name: Fix Bluetooth Printer SDK and Namespace
         run: |
           python3 - <<'PY'
-          import os
-          import re
           from pathlib import Path
+          import re
 
-          cache = Path.home() / ".pub-cache" / "hosted" / "pub.dev"
-          files = list(cache.glob(
-              "blue_thermal_printer-*/android/build.gradle"
-          ))
+          cache = Path.home() / ".pub-cache/hosted/pub.dev"
+          plugins = list(cache.glob("blue_thermal_printer-*/android"))
 
-          if not files:
-              files = list(cache.glob(
-                  "blue_thermal_printer-*/android/build.gradle.kts"
-              ))
+          if not plugins:
+              raise SystemExit("Bluetooth printer plugin not found")
 
-          if not files:
-              raise SystemExit("Bluetooth printer Gradle file not found")
+          for plugin in plugins:
+              gradle = plugin / "build.gradle"
+              manifest = plugin / "src/main/AndroidManifest.xml"
 
-          for file in files:
-              content = file.read_text()
+              if not gradle.exists() or not manifest.exists():
+                  raise SystemExit("Bluetooth plugin files missing")
+
+              content = gradle.read_text()
 
               content = re.sub(
                   r'compileSdkVersion\s+\d+',
                   'compileSdkVersion 35',
                   content
               )
-
               content = re.sub(
                   r'compileSdk\s*=\s*\d+',
                   'compileSdk = 35',
                   content
               )
-
               content = re.sub(
                   r'compileSdk\s+\d+',
                   'compileSdk 35',
                   content
               )
 
-              file.write_text(content)
-              print("Updated Bluetooth Plugin SDK:", file)
-          PY
-
-
-      - name: Fix Bluetooth Printer Namespace
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          import re
-
-          plugin = Path.home() / ".pub-cache/hosted/pub.dev/blue_thermal_printer-1.2.3/android"
-          gradle = plugin / "build.gradle"
-          manifest = plugin / "src/main/AndroidManifest.xml"
-
-          if not gradle.exists() or not manifest.exists():
-              raise SystemExit("Bluetooth printer plugin files not found")
-
-          content = manifest.read_text()
-          match = re.search(r'<manifest\b[^>]*\bpackage=["\']([^"\']+)', content)
-
-          if not match:
-              raise SystemExit("Cannot detect plugin package")
-
-          namespace = match.group(1)
-          build = gradle.read_text()
-
-          if not re.search(r'(?m)^\s*namespace\s+', build):
-              build, count = re.subn(
-                  r'(?m)^(\s*android\s*\{)',
-                  lambda m: m.group(1) + '\n    namespace "' + namespace + '"',
-                  build,
-                  count=1
+              manifest_text = manifest.read_text()
+              match = re.search(
+                  r'<manifest\b[^>]*\bpackage=["\']([^"\']+)',
+                  manifest_text
               )
-              if count == 0:
-                  raise SystemExit("Android block not found")
 
-              gradle.write_text(build)
+              if not match:
+                  raise SystemExit("Cannot detect Bluetooth namespace")
 
-          print("Namespace configured:", namespace)
+              namespace = match.group(1)
+
+              if not re.search(r'(?m)^\s*namespace\s+', content):
+                  content, count = re.subn(
+                      r'(?m)^(\s*android\s*\{)',
+                      lambda m: m.group(1) +
+                      '\n    namespace "' + namespace + '"',
+                      content,
+                      count=1
+                  )
+
+                  if count == 0:
+                      raise SystemExit("Android block not found")
+
+              gradle.write_text(content)
+              print("Bluetooth plugin configured:", namespace)
           PY
 
-      
-      - name: Build APK
+      - name: Build Release APK
         run: |
-          flutter build apk --release --verbose
-          echo "===== APK FILE CHECK ====="
-          find build android -type f -name "*.apk" -print || true
-          echo "===== BUILD OUTPUT ====="
-          ls -lah build/app/outputs/flutter-apk/ || true
+          cd android
+          chmod +x gradlew
+          ./gradlew :app:assembleRelease --stacktrace
+          cd ..
 
+          echo "===== SEARCH APK ====="
+          find android -type f -name "*.apk" -print
+
+          APK_PATH=$(find android -type f \
+            -name "app-release.apk" -print -quit)
+
+          if [ -z "$APK_PATH" ]; then
+            echo "ERROR: APK was not generated"
+            exit 1
+          fi
+
+          mkdir -p build/app/outputs/flutter-apk
+
+          cp "$APK_PATH" \
+            build/app/outputs/flutter-apk/app-release.apk
+
+          echo "===== APK READY ====="
+          ls -lh build/app/outputs/flutter-apk/app-release.apk
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: VoucherMasterPro-APK
           path: build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: error
+          retention-days: 7
