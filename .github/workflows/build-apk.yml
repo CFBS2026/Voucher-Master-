@@ -28,6 +28,20 @@ jobs:
 
       - name: Create Android project
         run: flutter create --platforms=android --org com.cfbs.vouchermaster .
+      
+      - name: Disable Crashing Android Lint Task
+        run: |
+          cat >> android/build.gradle <<'EOF'
+
+          // Workaround for Android Lint JavaDocParser crash
+          subprojects {
+              tasks.configureEach {
+                  if (name == "lintVitalAnalyzeRelease") {
+                      enabled = false
+                  }
+              }
+          }
+          EOF
 
       - name: Install dependencies
         run: flutter pub get
