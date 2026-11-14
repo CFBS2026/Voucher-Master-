@@ -1,39 +1,22 @@
 name: voucher_master
-description: "Ruijie Gateway Voucher and Thermal Printing Mobile App"
+description: Voucher Master Pro Android app using the existing Supabase project
 publish_to: "none"
-version: 1.0.0+1
-
+version: 2.0.0+2
 environment:
-  sdk: ">=3.0.0 <4.0.0"
-
+  sdk: ">=3.3.0 <4.0.0"
 dependencies:
   flutter:
     sdk: flutter
-
-  # Network & API တွေအတွက်
-  http: ^1.2.0
-  dio: ^5.4.0
-
-  # Local Database (Voucher များနှင့် ရောင်းရငွေ သိမ်းရန်)
-  sqflite: ^2.3.2
-  path_provider: ^2.1.2
-
-  # Bluetooth Thermal Printer (စလစ်ထုတ်ရန်) - Version Error ဖြေရှင်းပြီး
+  supabase_flutter: ^2.8.0
   blue_thermal_printer: ^1.2.3
   esc_pos_utils_plus: ^2.0.2
-
-  # UI လှပစေရန်နှင့် Icons များအတွက်
+  shared_preferences: ^2.3.2
   intl: ^0.19.0
-  shared_preferences: ^2.2.2
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.0
-
+  flutter_lints: ^4.0.0
 flutter:
   uses-material-design: true
-
-  # လိုအပ်ပါက Icons သို့မဟုတ် Fonts ထည့်ရန် နေရာ
-  # assets:
-  #   - assets/images/
+  assets:
+    - assets/app_logo.jpg
