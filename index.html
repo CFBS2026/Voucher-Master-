@@ -1,221 +1,1642 @@
 <!DOCTYPE html>
 <html lang="my">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voucher Master - Complete Management System</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Smart Monthly Report Pro - ကျောင်းနှင့် စာကြည့်တိုက် လချုပ် App</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Myanmar:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --card-border: #334155;
+    --text: #f8fafc;
+    --muted: #94a3b8;
+    --primary: #3b82f6;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --input-bg: #0f172a;
+  }
+
+  * {
+    box-sizing: border-box;
+    font-family: 'Noto Sans Myanmar', 'Pyidaungsu', sans-serif;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  .app-header {
+    background: linear-gradient(135deg, #1e3a8a, #0f172a);
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--card-border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .app-header h1 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .license-pill {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 99px;
+    font-weight: 700;
+  }
+  .pill-demo { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #f59e0b; }
+  .pill-pro { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; }
+
+  .app-header p {
+    margin: 2px 0 0;
+    font-size: 11px;
+    color: #93c5fd;
+  }
+
+  .tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+    background: rgba(15, 23, 42, 0.7);
+    padding: 4px;
+    border-radius: 10px;
+  }
+
+  .tab-btn {
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    padding: 8px 6px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  .tab-btn.active {
+    background: var(--primary);
+    color: #fff;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 14px;
+    padding-bottom: 90px;
+  }
+
+  .tab-content {
+    display: none;
+  }
+
+  .tab-content.active {
+    display: block;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 14px;
+  }
+
+  .card-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #60a5fa;
+    margin: 0 0 12px 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--card-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  @media (max-width: 600px) {
+    .grid-2 { grid-template-columns: 1fr; }
+  }
+
+  .form-group {
+    margin-bottom: 10px;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  input[type="text"], input[type="number"], select, textarea {
+    width: 100%;
+    background: var(--input-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text);
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 13px;
+  }
+
+  input[type="number"] {
+    text-align: center;
+    padding: 6px 3px;
+    min-width: 44px;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+  }
+
+  table.app-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  table.app-table th, table.app-table td {
+    border: 1px solid var(--card-border);
+    padding: 6px 4px;
+    text-align: center;
+  }
+
+  table.app-table th {
+    background: #0f172a;
+    color: #93c5fd;
+    font-weight: 600;
+  }
+
+  .calc-val {
+    font-weight: 700;
+    color: #34d399;
+    background: rgba(16, 185, 129, 0.1);
+  }
+
+  .diff-pos { color: #34d399; font-weight: 700; }
+  .diff-neg { color: #f87171; font-weight: 700; }
+
+  .summary-badges {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .badge-box {
+    background: #0f172a;
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .badge-box .num {
+    font-size: 19px;
+    font-weight: 700;
+    color: #38bdf8;
+  }
+
+  .badge-box .lbl {
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #1e293b;
+    border-top: 1px solid var(--card-border);
+    padding: 10px 14px;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    z-index: 60;
+  }
+
+  .btn {
+    border: none;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    color: #fff;
+  }
+
+  .btn-primary { background: var(--primary); flex: 2; }
+  .btn-success { background: var(--success); flex: 1; }
+  .btn-warning { background: #475569; flex: 1; }
+  .btn-danger { background: var(--danger); }
+  .btn-sm { padding: 5px 10px; font-size: 11px; }
+
+  .demo-banner {
+    background: rgba(245, 158, 11, 0.15);
+    border: 1px solid #f59e0b;
+    color: #fcd34d;
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 12px;
+    margin-bottom: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .info-box {
+    background: #0f172a;
+    border: 1px dashed #475569;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    color: #cbd5e1;
+    margin-top: 8px;
+  }
+
+  #print-school-sheet, #print-library-sheet {
+    display: none;
+  }
+
+  @media print {
+    body {
+      background: #fff !important;
+      color: #000 !important;
+      margin: 0;
+      padding: 0;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .no-print {
+      display: none !important;
+    }
+
+    body.print-school #print-school-sheet {
+      display: block !important;
+      width: 100%;
+      font-size: 10.5pt;
+      line-height: 1.25;
+      position: relative;
+    }
+
+    body.print-library #print-library-sheet {
+      display: block !important;
+      width: 100%;
+      font-size: 9.5pt;
+      line-height: 1.25;
+      position: relative;
+    }
+
+    .demo-watermark {
+      position: fixed;
+      top: 42%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-30deg);
+      font-size: 48pt;
+      font-weight: 700;
+      color: rgba(239, 68, 68, 0.18);
+      border: 4px solid rgba(239, 68, 68, 0.18);
+      padding: 10px 28px;
+      pointer-events: none;
+      z-index: 999;
+      white-space: nowrap;
+    }
+
+    .p-header {
+      text-align: center;
+      font-weight: 700;
+      font-size: 11.5pt;
+      line-height: 1.35;
+      margin-bottom: 6px;
+      white-space: pre-line;
+    }
+
+    .p-meta-line {
+      font-size: 10.5pt;
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .p-underline {
+      border-bottom: 1px dotted #000;
+      padding: 0 8px;
+      font-weight: 600;
+      display: inline-block;
+      min-width: 90px;
+      text-align: center;
+    }
+
+    .p-sec-title {
+      text-align: center;
+      font-weight: 700;
+      font-size: 10.5pt;
+      margin: 5px 0 3px;
+    }
+
+    table.p-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5pt;
+      margin-bottom: 6px;
+    }
+
+    table.p-table th, table.p-table td {
+      border: 1px solid #000;
+      padding: 2px 3px;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    table.p-table th {
+      font-weight: 700;
+      background-color: #f3f4f6 !important;
+    }
+
+    .p-footer-grid {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-top: 8px;
+      gap: 12px;
+    }
+
+    table.p-support-table {
+      width: 56%;
+      border-collapse: collapse;
+      font-size: 9pt;
+    }
+
+    table.p-support-table td {
+      border: 1px solid #000;
+      padding: 4px 6px;
+      vertical-align: middle;
+    }
+
+    .p-sign-box {
+      width: 42%;
+      font-size: 9.5pt;
+      line-height: 1.55;
+      padding-top: 6px;
+    }
+
+    .p-sign-row { display: flex; }
+    .p-sign-lbl { width: 68px; flex-shrink: 0; }
+    .p-sign-val {
+      border-bottom: 1px dotted #000;
+      flex: 1;
+      padding-left: 4px;
+      min-height: 18px;
+    }
+
+    .p-note {
+      margin-top: 6px;
+      font-size: 8.5pt;
+    }
+
+    .lib-title-block {
+      font-size: 12pt;
+      font-weight: 700;
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+
+    table.lib-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5pt;
+    }
+
+    table.lib-table th, table.lib-table td {
+      border: 1px solid #000;
+      padding: 4px 5px;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    table.lib-table th {
+      font-weight: 700;
+      background-color: #f3f4f6 !important;
+    }
+
+    table.lib-table td.left-text {
+      text-align: left;
+      padding-left: 6px;
+    }
+  }
+</style>
+<style id="dynamic-page-style"></style>
 </head>
-<body class="bg-gray-900 text-gray-100 font-sans antialiased">
+<body>
 
-    <!-- App Container -->
-    <div id="app" class="max-w-md mx-auto min-h-screen bg-gray-800 flex flex-col shadow-2xl relative pb-24">
-        
-        <!-- Header -->
-        <header class="bg-blue-600 p-4 text-white flex justify-between items-center shadow-md sticky top-0 z-50">
-            <div class="flex items-center space-x-2">
-                <i class="fa-solid fa-wifi text-xl"></i>
-                <h1 class="text-base font-bold">Voucher Master Pro</h1>
-            </div>
-            <div class="flex items-center space-x-3">
-                <button onclick="switchTab('settings')" class="bg-blue-700 p-2 rounded-full hover:bg-blue-800 transition">
-                    <i class="fa-solid fa-bluetooth-b text-sm"></i>
-                </button>
-            </div>
-        </header>
-
-        <!-- Main Content Area -->
-        <main class="flex-1 p-4 overflow-y-auto space-y-4">
-            
-            <!-- 1. Dashboard Tab -->
-            <div id="tab-dashboard" class="space-y-4">
-                <div class="grid grid-cols-2 gap-3">
-                    <div class="bg-gray-700 p-3 rounded-xl border border-gray-600 shadow">
-                        <p class="text-xs text-gray-400">အသုံးပြုဆဲ Voucher</p>
-                        <h2 class="text-xl font-bold text-green-400">24 ခု</h2>
-                    </div>
-                    <div class="bg-gray-700 p-3 rounded-xl border border-gray-600 shadow">
-                        <p class="text-xs text-gray-400">ဒီနေ့ဝင်ငွေ</p>
-                        <h2 class="text-xl font-bold text-blue-400">15,000 Ks</h2>
-                    </div>
-                </div>
-
-                <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-4 rounded-xl shadow-lg text-white">
-                    <h3 class="font-bold text-sm mb-1"><i class="fa-solid fa-server mr-2"></i>Ruijie Gateway Status</h3>
-                    <p class="text-xs text-blue-100">Gateway: <span class="font-mono">192.168.128.1</span></p>
-                    <div class="mt-3 flex justify-between text-xs bg-blue-800/50 p-2 rounded">
-                        <span>Online Clients: 38</span>
-                        <span>Blacklisted: 3</span>
-                    </div>
-                </div>
-
-                <!-- Quick Nav Cards -->
-                <div class="grid grid-cols-2 gap-3">
-                    <button onclick="switchTab('vouchers')" class="bg-gray-700 hover:bg-gray-600 p-3 rounded-xl flex items-center space-x-3 transition">
-                        <i class="fa-solid fa-ticket text-blue-400 text-xl"></i>
-                        <div class="text-left"><p class="text-xs font-bold">Vouchers</p><p class="text-[10px] text-gray-400">ဘောက်ချာထုတ်ရန်</p></div>
-                    </button>
-                    <button onclick="switchTab('revenue')" class="bg-gray-700 hover:bg-gray-600 p-3 rounded-xl flex items-center space-x-3 transition">
-                        <i class="fa-solid fa-chart-line text-green-400 text-xl"></i>
-                        <div class="text-left"><p class="text-xs font-bold">Revenue</p><p class="text-[10px] text-gray-400">ဝင်ငွေစာရင်း</p></div>
-                    </button>
-                    <button onclick="switchTab('devices')" class="bg-gray-700 hover:bg-gray-600 p-3 rounded-xl flex items-center space-x-3 transition">
-                        <i class="fa-solid fa-mobile-screen text-yellow-400 text-xl"></i>
-                        <div class="text-left"><p class="text-xs font-bold">Connected</p><p class="text-[10px] text-gray-400">ချိတ်ဆက်ထားသူများ</p></div>
-                    </button>
-                    <button onclick="switchTab('blacklist')" class="bg-gray-700 hover:bg-gray-600 p-3 rounded-xl flex items-center space-x-3 transition">
-                        <i class="fa-solid fa-ban text-red-400 text-xl"></i>
-                        <div class="text-left"><p class="text-xs font-bold">Blacklist</p><p class="text-[10px] text-gray-400">ပိတ်ပင်ထားသူများ</p></div>
-                    </button>
-                </div>
-            </div>
-
-            <!-- 2. Vouchers Tab -->
-            <div id="tab-vouchers" class="hidden space-y-4">
-                <div class="flex justify-between items-center">
-                    <h2 class="text-base font-bold">Voucher Management</h2>
-                    <button onclick="alert('Voucher အသစ်ထုတ်လုပ်ခြင်း မျက်နှာပြင်')" class="bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-lg text-xs font-medium flex items-center space-x-1">
-                        <i class="fa-solid fa-plus"></i><span>အသစ်ထုတ်မည်</span>
-                    </button>
-                </div>
-                <div class="space-y-2">
-                    <div class="bg-gray-700 p-3 rounded-lg flex justify-between items-center border border-gray-600">
-                        <div>
-                            <p class="font-mono font-bold text-blue-300 text-sm">VM-839210</p>
-                            <p class="text-[11px] text-gray-400">3 Hours • 500 Ks</p>
-                        </div>
-                        <span class="text-[10px] bg-green-500/20 text-green-400 px-2 py-0.5 rounded">Active</span>
-                    </div>
-                    <div class="bg-gray-700 p-3 rounded-lg flex justify-between items-center border border-gray-600">
-                        <div>
-                            <p class="font-mono font-bold text-blue-300 text-sm">VM-492102</p>
-                            <p class="text-[11px] text-gray-400">1 Day • 2,000 Ks</p>
-                        </div>
-                        <span class="text-[10px] bg-red-500/20 text-red-400 px-2 py-0.5 rounded">Expired</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 3. Revenue Tab -->
-            <div id="tab-revenue" class="hidden space-y-4">
-                <h2 class="text-base font-bold">ဝင်ငွေနှင့် ဘဏ္ဍာရေးစာရင်း</h2>
-                <div class="bg-gray-700 p-4 rounded-xl border border-gray-600 space-y-2">
-                    <div class="flex justify-between text-sm">
-                        <span class="text-gray-400">ယနေ့ စုစုပေါင်းဝင်ငွေ:</span>
-                        <span class="font-bold text-green-400">15,000 Ks</span>
-                    </div>
-                    <div class="flex justify-between text-sm">
-                        <span class="text-gray-400">ယခုလ စုစုပေါင်းဝင်ငွေ:</span>
-                        <span class="font-bold text-blue-400">450,000 Ks</span>
-                    </div>
-                </div>
-                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider">လတ်တလော အရောင်းစာရင်းများ</h3>
-                <div class="space-y-2">
-                    <div class="bg-gray-700 p-3 rounded-lg flex justify-between items-center text-xs">
-                        <div><p class="font-bold">3 Hours Package</p><p class="text-[10px] text-gray-400">Today, 02:45 PM</p></div>
-                        <span class="text-green-400 font-bold">+500 Ks</span>
-                    </div>
-                    <div class="bg-gray-700 p-3 rounded-lg flex justify-between items-center text-xs">
-                        <div><p class="font-bold">1 Day Package</p><p class="text-[10px] text-gray-400">Today, 11:20 AM</p></div>
-                        <span class="text-green-400 font-bold">+2,000 Ks</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 4. Connected Devices Tab -->
-            <div id="tab-devices" class="hidden space-y-4">
-                <h2 class="text-base font-bold">ချိတ်ဆက်ထားသော ဖုန်းများ</h2>
-                <div class="space-y-2">
-                    <div class="bg-gray-700 p-3 rounded-lg flex justify-between items-center border border-gray-600">
-                        <div>
-                            <p class="font-medium text-sm">Xiaomi 14 Ultra</p>
-                            <p class="text-[10px] text-gray-400 font-mono">CC:2D:E0:1A:4B</p>
-                        </div>
-                        <button onclick="alert('Device ကို Blacklist သို့ ပို့ပြီးပါပြီ')" class="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-2.5 py-1 rounded text-xs transition">Block</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 5. Blacklist Tab -->
-            <div id="tab-blacklist" class="hidden space-y-4">
-                <h2 class="text-base font-bold">ပိတ်ပင်ထားသော စက်များ (Blacklist)</h2>
-                <div class="space-y-2">
-                    <div class="bg-gray-700 p-3 rounded-lg flex justify-between items-center border border-gray-600">
-                        <div>
-                            <p class="font-medium text-sm text-red-300">Unknown Device</p>
-                            <p class="text-[10px] text-gray-400 font-mono">FF:EE:DD:CC:BB</p>
-                        </div>
-                        <button onclick="alert('Block ဖြსခ်ပြီးပါပြီ')" class="bg-blue-500/25 hover:bg-blue-500/30 text-blue-300 px-2.5 py-1 rounded text-xs transition">Unblock</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 6. Settings Tab -->
-            <div id="tab-settings" class="hidden space-y-4">
-                <h2 class="text-base font-bold">Printer & App Settings</h2>
-                <div class="bg-gray-700 p-4 rounded-xl space-y-3">
-                    <label class="block text-xs text-gray-300">Bluetooth Thermal Printer Name</label>
-                    <input type="text" value="RP58 Printer (58mm)" class="w-full bg-gray-800 border border-gray-600 rounded p-2 text-xs">
-                    <button onclick="alert('Thermal Printer ချိတ်ဆက်မှု အောင်မြင်သည်!')" class="w-full bg-blue-600 hover:bg-blue-700 p-2 rounded text-xs font-medium">စမ်းသပ်ပုံနှိပ်မည် (Test Print)</button>
-                </div>
-            </div>
-
-        </main>
-
-        <!-- Bottom Navigation Bar -->
-        <nav class="absolute bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-800 flex justify-around p-2 text-gray-400 z-50">
-            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="flex flex-col items-center text-blue-500">
-                <i class="fa-solid fa-house text-base"></i>
-                <span class="text-[9px] mt-1">ပင်မ</span>
-            </button>
-            <button onclick="switchTab('vouchers')" id="nav-vouchers" class="flex flex-col items-center hover:text-white">
-                <i class="fa-solid fa-ticket text-base"></i>
-                <span class="text-[9px] mt-1">Vouchers</span>
-            </button>
-            <button onclick="switchTab('revenue')" id="nav-revenue" class="flex flex-col items-center hover:text-white">
-                <i class="fa-solid fa-chart-line text-base"></i>
-                <span class="text-[9px] mt-1">ဝင်ငွေ</span>
-            </button>
-            <button onclick="switchTab('devices')" id="nav-devices" class="flex flex-col items-center hover:text-white">
-                <i class="fa-solid fa-mobile-screen text-base"></i>
-                <span class="text-[9px] mt-1">ဖုန်းများ</span>
-            </button>
-            <button onclick="switchTab('blacklist')" id="nav-blacklist" class="flex flex-col items-center hover:text-white">
-                <i class="fa-solid fa-ban text-base"></i>
-                <span class="text-[9px] mt-1">Blacklist</span>
-            </button>
-        </nav>
-
+<div class="no-print">
+  <div class="app-header">
+    <div class="header-top">
+      <div>
+        <h1>
+          Monthly Report Pro
+          <span class="license-pill pill-demo" id="licenseBadge">DEMO VERSION</span>
+        </h1>
+        <p id="headerOrgSubtitle">ကျောင်းနှင့် စာကြည့်တိုက် လချုပ်စာရင်း ထုတ်လုပ်သည့်စနစ်</p>
+      </div>
+      <button class="btn btn-warning btn-sm" id="topActionBtn" onclick="handleTopAction()">ယခင်လအတိုင်း ကူးမည်</button>
     </div>
 
-    <!-- Script Logic -->
-    <script>
-        function switchTab(tabName) {
-            // Hide all tabs
-            const tabs = ['dashboard', 'vouchers', 'revenue', 'devices', 'blacklist', 'settings'];
-            tabs.forEach(t => {
-                const el = document.getElementById('tab-' + t);
-                if (el) el.classList.add('hidden');
-                
-                const nav = document.getElementById('nav-' + t);
-                if (nav) {
-                    nav.classList.remove('text-blue-500');
-                    nav.classList.add('text-gray-400');
-                }
-            });
+    <div class="tabs">
+      <button class="tab-btn active" id="btn-tab-school" onclick="switchTab('school')">🏫 ကျောင်းလချုပ်</button>
+      <button class="tab-btn" id="btn-tab-library" onclick="switchTab('library')">📚 စာကြည့်တိုက်</button>
+      <button class="tab-btn" id="btn-tab-settings" onclick="switchTab('settings')">⚙️ ဆက်တင်/လိုင်စင်</button>
+    </div>
+  </div>
 
-            // Show selected tab
-            const activeTab = document.getElementById('tab-' + tabName);
-            if (activeTab) activeTab.classList.remove('hidden');
+  <div class="container">
+    <div class="demo-banner" id="demoBanner">
+      <span>⚠️ လက်ရှိ <strong>Demo Version</strong> ဖြင့် အသုံးပြုနေပါသည်။ PDF ထုတ်ရာတွင် စာမျက်နှာပေါ်၌ DEMO စာသား ပါရှိပါမည်။</span>
+      <button class="btn btn-primary btn-sm" onclick="switchTab('settings')" style="flex:none;">Key ထည့်ရန်</button>
+    </div>
 
-            const activeNav = document.getElementById('nav-' + tabName);
-            if (activeNav) {
-                activeNav.classList.add('text-blue-500');
-                activeNav.classList.remove('text-gray-400');
-            }
-        }
-    </script>
+    <div id="tab-school" class="tab-content active">
+      <div class="summary-badges">
+        <div class="badge-box">
+          <div class="num" id="top-total-teachers">0</div>
+          <div class="lbl">ဆရာ/ဆရာမ ပေါင်း</div>
+        </div>
+        <div class="badge-box">
+          <div class="num" id="top-total-students">0</div>
+          <div class="lbl">ယခုလ ကျောင်းသားပေါင်း</div>
+        </div>
+        <div class="badge-box">
+          <div class="num" id="top-diff-students">0</div>
+          <div class="lbl">အတိုး/အလျော့</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">၁။ ကျောင်းနှင့် လ အချက်အလက်</div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label>ကျောင်းအမည်</label>
+            <input type="text" id="schoolName" placeholder="ဥပမာ - အထက (ခွဲ) ..." oninput="saveData()">
+          </div>
+          <div class="form-group">
+            <label>ကျေးရွာ / ရပ်ကွက်</label>
+            <input type="text" id="villageName" placeholder="ကျေးရွာအမည် ထည့်ပါ" oninput="saveData()">
+          </div>
+          <div class="form-group">
+            <label>ပညာသင်နှစ်</label>
+            <input type="text" id="acadYear" value="၂၀၂၆ - ၂၀၂၇" oninput="saveData()">
+          </div>
+          <div class="form-group">
+            <label>လချုပ်တင်သွင်းသည့် လ</label>
+            <select id="reportMonth" onchange="handleMonthChange()">
+              <option value="ဇွန်">ဇွန် လ</option>
+              <option value="ဇူလိုင်">ဇူလိုင် လ</option>
+              <option value="ဩဂုတ်">ဩဂုတ် လ</option>
+              <option value="စက်တင်ဘာ">စက်တင်ဘာ လ</option>
+              <option value="အောက်တိုဘာ" selected>အောက်တိုဘာ လ</option>
+              <option value="နိုဝင်ဘာ">နိုဝင်ဘာ လ</option>
+              <option value="ဒီဇင်ဘာ">ဒီဇင်ဘာ လ</option>
+              <option value="ဇန်နဝါရီ">ဇန်နဝါရီ လ</option>
+              <option value="ဖေဖော်ဝါရီ">ဖေဖော်ဝါရီ လ</option>
+              <option value="မတ်">မတ် လ</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>အဖွဲ့အစည်းအမည်</label>
+            <input type="text" id="orgName" value="မြို့နယ်ပညာရေးဘုတ်" oninput="saveData()">
+          </div>
+          <div class="form-group">
+            <label>ကျောင်းအဆင့်</label>
+            <select id="schoolLevel" onchange="saveData()">
+              <option value="မူလတန်း">မူလတန်း</option>
+              <option value="အလယ်တန်း">အလယ်တန်း</option>
+              <option value="အထက်တန်း" selected>အထက်တန်း</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">၂။ ဆရာ/ဆရာမ စာရင်း (Auto ပေါင်းပေးသည်)</div>
+        <div class="table-wrap">
+          <table class="app-table">
+            <thead>
+              <tr>
+                <th rowspan="2">အမျိုးအစား</th>
+                <th colspan="3">CDM</th>
+                <th colspan="3">Volunteer</th>
+                <th colspan="3">စုစုပေါင်း</th>
+              </tr>
+              <tr>
+                <th>မူ</th><th>လယ်</th><th>ထက်</th>
+                <th>မူ</th><th>လယ်</th><th>ထက်</th>
+                <th>မူ</th><th>လယ်</th><th>ထက်</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>ကျား</strong></td>
+                <td><input type="number" min="0" id="t_cdm_m_pri" value="0" oninput="recalcSchool()"></td>
+                <td><input type="number" min="0" id="t_cdm_m_mid" value="0" oninput="recalcSchool()"></td>
+                <td><input type="number" min="0" id="t_cdm_m_high" value="0" oninput="recalcSchool()"></td>
+                <td><input type="number" min="0" id="t_vol_m_pri" value="0" oninput="recalcSchool()"></td>
+                <td><input type="number" min="0" id="t_vol_m_mid" value="0" oninput="recalcSchool()"></td>
+                <td><input type="number" min="0" id="t_vol_m_high" value="0" oninput="recalcSchool()"></td>
+                <td class="calc-val" id="t_tot_m_pri">0</td>
+                <td class="calc-val" id="t_tot_m_mid">0</td>
+                <td class="calc-val" id="t_tot_m_high">0</td>
+              </tr>
+              <tr>
+                <td><strong>မ</strong></td>
+                <td><input type="number" min="0" id="t_cdm_f_pri" value="0" oninput="recalcSchool()"></td>
+                <td><input type="number" min="0" id="t_cdm_f_mid" value="0" oninput="recalcSchool()"></td>
+                <td><input type="number" min="0" id="t_cdm_f_high" value="0" oninput="recalcSchool()"></td>
+                <td><input type="number" min="0" id="t_vol_f_pri" value="0" oninput="recalcSchool()"></td>
+                <td><input type="number" min="0" id="t_vol_f_mid" value="0" oninput="recalcSchool()"></td>
+                <td><input type="number" min="0" id="t_vol_f_high" value="0" oninput="recalcSchool()"></td>
+                <td class="calc-val" id="t_tot_f_pri">0</td>
+                <td class="calc-val" id="t_tot_f_mid">0</td>
+                <td class="calc-val" id="t_tot_f_high">0</td>
+              </tr>
+              <tr>
+                <td><strong>ပေါင်း</strong></td>
+                <td class="calc-val" id="t_cdm_s_pri">0</td>
+                <td class="calc-val" id="t_cdm_s_mid">0</td>
+                <td class="calc-val" id="t_cdm_s_high">0</td>
+                <td class="calc-val" id="t_vol_s_pri">0</td>
+                <td class="calc-val" id="t_vol_s_mid">0</td>
+                <td class="calc-val" id="t_vol_s_high">0</td>
+                <td class="calc-val" id="t_tot_s_pri">0</td>
+                <td class="calc-val" id="t_tot_s_mid">0</td>
+                <td class="calc-val" id="t_tot_s_high">0</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>၃။ အတန်းအလိုက် ကျောင်းသားစာရင်း</span>
+          <span style="font-size:11px; color:#94a3b8;">အဝင်/အထွက် Auto တွက်သည်</span>
+        </div>
+        <div class="grid-2" style="margin-bottom:8px;">
+          <div class="form-group">
+            <label>ယခင်လ အမည်</label>
+            <input type="text" id="prevMonthName" value="စက်တင်ဘာ" oninput="saveData()">
+          </div>
+          <div class="form-group">
+            <label>ယခုလ အမည်</label>
+            <input type="text" id="currMonthName" value="အောက်တိုဘာ" oninput="saveData()">
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="app-table">
+            <thead>
+              <tr>
+                <th rowspan="2">အတန်း</th>
+                <th colspan="3">ယခင်လ</th>
+                <th colspan="3">ယခုလ</th>
+                <th colspan="2">ခြားနားချက်</th>
+                <th rowspan="2">ရှင်းလင်းချက်</th>
+              </tr>
+              <tr>
+                <th>ကျား</th><th>မ</th><th>ပေါင်း</th>
+                <th>ကျား</th><th>မ</th><th>ပေါင်း</th>
+                <th>အဝင်</th><th>အထွက်</th>
+              </tr>
+            </thead>
+            <tbody id="student-tbody"></tbody>
+            <tfoot>
+              <tr style="background:#0f172a; font-weight:700;">
+                <td>စုစုပေါင်း</td>
+                <td class="calc-val" id="st_prev_m">0</td>
+                <td class="calc-val" id="st_prev_f">0</td>
+                <td class="calc-val" id="st_prev_t">0</td>
+                <td class="calc-val" id="st_curr_m">0</td>
+                <td class="calc-val" id="st_curr_f">0</td>
+                <td class="calc-val" id="st_curr_t">0</td>
+                <td class="calc-val" id="st_in_t">0</td>
+                <td class="calc-val" id="st_out_t">0</td>
+                <td>-</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">၄။ ထောက်ပံ့မှုနှင့် လက်မှတ်အချက်အလက်</div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label>ပထမအကြိမ်ထောက်ပံ့ရရှိမှု (ပြီး/မပြီး)</label>
+            <input type="text" id="supStatus" placeholder="ပြီး / မပြီး" oninput="saveData()">
+          </div>
+          <div class="form-group">
+            <label>Project ရရှိဖူးပါက</label>
+            <input type="text" id="supProject" placeholder="-" oninput="saveData()">
+          </div>
+          <div class="form-group">
+            <label>အမည်နှင့်အလှူရှင်(သို့)အဖွဲ့အစည်းအမည်</label>
+            <input type="text" id="supDonor" placeholder="-" oninput="saveData()">
+          </div>
+          <div class="form-group">
+            <label>ရရှိသည့် အထောက်အပံ့အမျိုးအစားနှင့် ကာလ</label>
+            <input type="text" id="supType" placeholder="-" oninput="saveData()">
+          </div>
+          <div class="form-group">
+            <label>လက်မှတ်ရေးထိုးသူ အမည်</label>
+            <input type="text" id="signName" placeholder="တာဝန်ခံ / ကျောင်းအုပ် အမည်" oninput="saveData()">
+          </div>
+          <div class="form-group">
+            <label>တာဝန်</label>
+            <input type="text" id="signRole" value="School Administrator" oninput="saveData()">
+          </div>
+          <div class="form-group">
+            <label>ကျောင်း / လိပ်စာ</label>
+            <input type="text" id="signSchool" placeholder="ကျောင်းအမည်နှင့် မြို့နယ်" oninput="saveData()">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-library" class="tab-content">
+      <div class="summary-badges">
+        <div class="badge-box">
+          <div class="num" id="lib-badge-users">0</div>
+          <div class="lbl">စာဖတ်သူ စုစုပေါင်း</div>
+        </div>
+        <div class="badge-box">
+          <div class="num" id="lib-badge-borrowers">0</div>
+          <div class="lbl">စာအုပ်ငှားသူ ပေါင်း</div>
+        </div>
+        <div class="badge-box">
+          <div class="num" id="lib-badge-books">0</div>
+          <div class="lbl">ငှားရမ်းစာအုပ် အရေအတွက်</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">၁။ စာကြည့်တိုက်နှင့် လ အချက်အလက်</div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label>စာကြည့်တိုက်အမည်</label>
+            <input type="text" id="libName" placeholder="စာကြည့်တိုက်အမည် ထည့်ပါ" oninput="saveData()">
+          </div>
+          <div class="form-group">
+            <label>လအမည်</label>
+            <select id="libMonth" onchange="saveData()">
+              <option value="ဇွန်">ဇွန်</option>
+              <option value="ဇူလိုင်">ဇူလိုင်</option>
+              <option value="ဩဂုတ်">ဩဂုတ်</option>
+              <option value="စက်တင်ဘာ">စက်တင်ဘာ</option>
+              <option value="အောက်တိုဘာ" selected>အောက်တိုဘာ</option>
+              <option value="နိုဝင်ဘာ">နိုဝင်ဘာ</option>
+              <option value="ဒီဇင်ဘာ">ဒီဇင်ဘာ</option>
+              <option value="ဇန်နဝါရီ">ဇန်နဝါရီ</option>
+              <option value="ဖေဖော်ဝါရီ">ဖေဖော်ဝါရီ</option>
+              <option value="မတ်">မတ်</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>၂။ စာကြည့်တိုက် အသုံးပြုမှုနှင့် စာဖတ်ခြင်းစာရင်း (စဉ် ၁ မှ ၈)</span>
+          <span style="font-size:11px; color:#94a3b8;">Auto ပေါင်းပေးသည်</span>
+        </div>
+        <div class="table-wrap">
+          <table class="app-table">
+            <thead>
+              <tr>
+                <th rowspan="2">စဉ်</th>
+                <th rowspan="2" style="min-width:150px;">အကြောင်းအရာ</th>
+                <th rowspan="2">စုစုပေါင်း<br>အရေအတွက်</th>
+                <th colspan="3">၁၈နှစ်အောက် (including CwD)</th>
+                <th colspan="3">၁၈နှစ်အထက် (including CwD)</th>
+                <th colspan="3">(CwD မသန်စွမ်းသီးသန့်)<br>၁၈နှစ်အောက်</th>
+                <th colspan="3">(CwD မသန်စွမ်းသီးသန့်)<br>၁၈နှစ်အထက်</th>
+              </tr>
+              <tr>
+                <th>ကျား</th><th>မ</th><th>ပေါင်း</th>
+                <th>ကျား</th><th>မ</th><th>ပေါင်း</th>
+                <th>ကျား</th><th>မ</th><th>ပေါင်း</th>
+                <th>ကျား</th><th>မ</th><th>ပေါင်း</th>
+              </tr>
+            </thead>
+            <tbody id="lib-grid-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">၃။ ငှားရမ်းစာအုပ်နှင့် အခြားလှုပ်ရှားမှု မှတ်တမ်းများ (စဉ် ၄ နှင့် ၉ မှ ၁၃)</div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label>၄။ ငှားရမ်းသောစာအုပ် အရေအတွက် (ဂဏန်း)</label>
+            <input type="number" min="0" id="lib_r4_num" value="0" oninput="recalcLibrary()">
+          </div>
+          <div class="form-group">
+            <label>၄။ ငှားရမ်းသောစာအုပ် မှတ်ချက်</label>
+            <input type="text" id="lib_r4_txt" placeholder="ဥပမာ - အုပ်ရေ-၁၀၀" oninput="saveData()">
+          </div>
+          <div class="form-group">
+            <label>၉။ အခြားသောစာကြည့်တိုက်လှုပ်ရှားမှုများ (အရေအတွက်)</label>
+            <input type="text" id="lib_r9_num" placeholder="ဥပမာ - ၂၅အုပ် / ၂ကြိမ်" oninput="saveData()">
+          </div>
+          <div class="form-group">
+            <label>၉။ အခြားသောစာကြည့်တိုက်လှုပ်ရှားမှုများ (အကြောင်းအရာ)</label>
+            <input type="text" id="lib_r9_txt" placeholder="လှုပ်ရှားမှု အကြောင်းအရာ ရေးရန်" oninput="saveData()">
+          </div>
+          <div class="form-group">
+            <label>၁၀။ project နှင့်ပတ်သတ်၍ တွေ့ဆုံဆွေးနွေးမှုများ/အစည်းအဝေးများ</label>
+            <input type="text" id="lib_r10_num" value="-" oninput="saveData()">
+          </div>
+          <div class="form-group">
+            <label>၁၀။ ဆွေးနွေးမှု/အစည်းအဝေး အသေးစိတ်</label>
+            <input type="text" id="lib_r10_txt" placeholder="-" oninput="saveData()">
+          </div>
+          <div class="form-group">
+            <label>၁၁။ စာကြည့်တိုက်လှုပ်ရှားမှု ရှိ/မရှိ (မရှိလျှင် ဘာကြောင့်ရေးရန်)</label>
+            <input type="text" id="lib_r11_num" value="Active" oninput="saveData()">
+          </div>
+          <div class="form-group">
+            <label>၁၁။ အကြောင်းအရာ မှတ်ချက်</label>
+            <input type="text" id="lib_r11_txt" placeholder="-" oninput="saveData()">
+          </div>
+          <div class="form-group">
+            <label>၁၂။ ပစ္စည်းရရှိမှု အမျိုးအစားနှင့် အရေအတွက်</label>
+            <input type="text" id="lib_r12_num" value="-" oninput="saveData()">
+          </div>
+          <div class="form-group">
+            <label>၁၂။ ပစ္စည်းရရှိမှု အသေးစိတ်</label>
+            <input type="text" id="lib_r12_txt" placeholder="-" oninput="saveData()">
+          </div>
+          <div class="form-group">
+            <label>၁၃။ ပစ္စည်းခွဲဝေပေးမှု</label>
+            <input type="text" id="lib_r13_num" value="-" oninput="saveData()">
+          </div>
+          <div class="form-group">
+            <label>၁၃။ ပစ္စည်းခွဲဝေပေးမှု အသေးစိတ်</label>
+            <input type="text" id="lib_r13_txt" placeholder="-" oninput="saveData()">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-settings" class="tab-content">
+      <div class="card">
+        <div class="card-title">
+          <span>🔑 App လိုင်စင် အတည်ပြုခြင်း (License Activation)</span>
+          <span class="license-pill pill-demo" id="settingsLicenseStatus">DEMO</span>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label>ဝယ်ယူသူ အမည် / ကျောင်းအမည် (Registered Name)</label>
+            <input type="text" id="licClientName" placeholder="ဥပမာ - ရောင်နီဦးကျောင်း">
+          </div>
+          <div class="form-group">
+            <label>လိုင်စင်ကုဒ် (License Key)</label>
+            <input type="text" id="licKeyInput" placeholder="MRP-XXXX-XXXX">
+          </div>
+        </div>
+        <div style="display:flex; gap:8px; margin-top:6px;">
+          <button class="btn btn-success" onclick="activateLicense()">✅ လိုင်စင် အတည်ပြုမည်</button>
+          <button class="btn btn-warning" onclick="loadSampleData()">နမူနာဂဏန်းများ စမ်းကြည့်မည်</button>
+        </div>
+
+        <div class="info-box">
+          <strong>💡 ရောင်းချသူ (Admin) အတွက် မှတ်စု:</strong><br>
+          ဝယ်ယူသူ ပေးပို့လာသည့် <em>Registered Name</em> ကို အောက်ပါ Key Generator တွင် ရိုက်ထည့်ပြီး ထွက်လာသော License Key ကို ဝယ်ယူသူထံ ပေးပို့နိုင်ပါသည်။
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <input type="text" id="adminGenName" placeholder="ဝယ်ယူသူအမည် ရိုက်ထည့်ပါ">
+            <button class="btn btn-primary btn-sm" onclick="generateAdminKey()" style="flex:none;">Key ထုတ်မည်</button>
+          </div>
+          <div id="adminGenOutput" style="margin-top:6px; color:#34d399; font-weight:700;"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📝 ရုံး/အဖွဲ့အစည်း ခေါင်းစီး ပြင်ဆင်ခြင်း</div>
+        <div class="form-group">
+          <label>ကျောင်းလချုပ် အပေါ်ဆုံး ခေါင်းစီးစာသား (၃ ကြောင်း)</label>
+          <textarea id="customHeaderLines" rows="3" oninput="saveData()">အမျိုးသားညီညွတ်ရေးအစိုးရ
+ပညာရေးဝန်ကြီးဌာန
+စစ်ကိုင်းဖက်ဒရယ်ယူနစ် ၊ မုံရွာခရိုင် ၊ ဘုတလင်မြို့နယ်</textarea>
+        </div>
+        <div class="form-group">
+          <label>အောက်ခြေ မှတ်ချက်စာသား</label>
+          <input type="text" id="customFooterNote" value="Grade-11(သင်ရိုးဟောင်း)မရှိတော့ပါ။ အတန်းတစ်ခုတွင် Senior,Junior နှစ်တန်းဖြစ်နေသည့် အတန်းများကိုပေါင်း၍ဖြည့်သွင်းပါ။" oninput="saveData()">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">💾 Data စီမံခန့်ခွဲမှု</div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn btn-warning" onclick="exportJSON()">📤 Backup ဖိုင်ထုတ်မည်</button>
+          <label class="btn btn-primary" style="cursor:pointer;">
+            📥 Backup ပြန်သွင်းမည်
+            <input type="file" accept=".json" style="display:none;" onchange="importJSON(event)">
+          </label>
+          <button class="btn btn-danger" onclick="resetAllData()">🗑️ အချက်အလက်အားလုံး ဖျက်မည်</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-bar" id="bottomBar">
+    <button class="btn btn-warning" onclick="exportJSON()">Backup</button>
+    <button class="btn btn-success" onclick="saveData(true)">သိမ်းမည်</button>
+    <button class="btn btn-primary" id="pdfBtnLabel" onclick="generatePDF()">📄 ကျောင်းလချုပ် PDF ထုတ်မည်</button>
+  </div>
+</div>
+
+<div id="print-school-sheet">
+  <div class="demo-watermark" id="wm-school">DEMO VERSION</div>
+  <div class="p-header" id="p_customHeaderLines"></div>
+  <div class="p-meta-line">
+    <span><span class="p-underline" id="p_schoolName" style="min-width:170px;"></span> ကျောင်း ၊</span>
+    <span><span class="p-underline" id="p_villageName" style="min-width:110px;"></span> ကျေးရွာ</span>
+  </div>
+  <div class="p-meta-line">
+    <span><span class="p-underline" id="p_acadYear" style="min-width:100px;">၂၀၂၆ - ၂၀၂၇</span> ပညာသင်နှစ် ၊</span>
+    <span><span class="p-underline" id="p_reportMonth" style="min-width:90px;">အောက်တိုဘာ</span> လ</span>
+  </div>
+  <div style="text-align:center; font-weight:700; font-size:10.5pt; margin:4px 0;">
+    CDM / Volunteer ဆရာ/ဆရာမ ၊ ကျောင်းသားလချုပ်စာရင်း
+  </div>
+  <div style="font-size:10pt; margin-bottom:2px;">
+    ၁။ အဖွဲ့အစည်းအမည် <span class="p-underline" id="p_orgName" style="min-width:220px;">မြို့နယ်ပညာရေးဘုတ်</span><br>
+    <span style="padding-left:18px; font-size:9pt;">(မြို့နယ်ပညာရေးဘုတ် (သို့) CBO / CSO)</span>
+  </div>
+  <div style="font-size:10pt; margin-bottom:4px;">
+    ၂။ ကျောင်းအဆင့် <span class="p-underline" id="p_schoolLevel" style="min-width:160px;">အထက်တန်း</span>
+  </div>
+  <div class="p-sec-title">ဆရာ/ဆရာမ စာရင်း</div>
+  <table class="p-table">
+    <thead>
+      <tr>
+        <th rowspan="2" style="width:13%;"></th>
+        <th colspan="3">CDM</th>
+        <th colspan="3">Volunteer</th>
+        <th colspan="3">ဆရာ/ဆရာမ စုစုပေါင်း</th>
+      </tr>
+      <tr>
+        <th>မူ</th><th>လယ်</th><th>ထက်</th>
+        <th>မူ</th><th>လယ်</th><th>ထက်</th>
+        <th>မူ</th><th>လယ်</th><th>ထက်</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>ကျား</strong></td>
+        <td id="p_t_cdm_m_pri"></td><td id="p_t_cdm_m_mid"></td><td id="p_t_cdm_m_high"></td>
+        <td id="p_t_vol_m_pri"></td><td id="p_t_vol_m_mid"></td><td id="p_t_vol_m_high"></td>
+        <td id="p_t_tot_m_pri"></td><td id="p_t_tot_m_mid"></td><td id="p_t_tot_m_high"></td>
+      </tr>
+      <tr>
+        <td><strong>မ</strong></td>
+        <td id="p_t_cdm_f_pri"></td><td id="p_t_cdm_f_mid"></td><td id="p_t_cdm_f_high"></td>
+        <td id="p_t_vol_f_pri"></td><td id="p_t_vol_f_mid"></td><td id="p_t_vol_f_high"></td>
+        <td id="p_t_tot_f_pri"></td><td id="p_t_tot_f_mid"></td><td id="p_t_tot_f_high"></td>
+      </tr>
+      <tr>
+        <td><strong>ပေါင်း</strong></td>
+        <td id="p_t_cdm_s_pri"></td><td id="p_t_cdm_s_mid"></td><td id="p_t_cdm_s_high"></td>
+        <td id="p_t_vol_s_pri"></td><td id="p_t_vol_s_mid"></td><td id="p_t_vol_s_high"></td>
+        <td id="p_t_tot_s_pri"></td><td id="p_t_tot_s_mid"></td><td id="p_t_tot_s_high"></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="p-sec-title">အတန်းအလိုက် ကျောင်းသားစာရင်း</div>
+  <table class="p-table">
+    <thead>
+      <tr>
+        <th rowspan="3" style="width:5%;">စဉ်</th>
+        <th rowspan="3" style="width:12%;">အတန်း</th>
+        <th colspan="3"><span id="p_prevMonthName">စက်တင်ဘာ</span> လ<br>(ယခင်လ)</th>
+        <th colspan="3"><span id="p_currMonthName">အောက်တိုဘာ</span> လ<br>(ယခုလ)</th>
+        <th colspan="6">ခြားနားချက်</th>
+        <th rowspan="3" style="width:16%;">ခြားနားမှု<br>ရှင်းလင်းချက်</th>
+      </tr>
+      <tr>
+        <th rowspan="2">ကျား</th><th rowspan="2">မ</th><th rowspan="2">ပေါင်း</th>
+        <th rowspan="2">ကျား</th><th rowspan="2">မ</th><th rowspan="2">ပေါင်း</th>
+        <th colspan="3">အဝင်</th>
+        <th colspan="3">အထွက်</th>
+      </tr>
+      <tr>
+        <th>ကျား</th><th>မ</th><th>ပေါင်း</th>
+        <th>ကျား</th><th>မ</th><th>ပေါင်း</th>
+      </tr>
+    </thead>
+    <tbody id="p_student_tbody"></tbody>
+    <tfoot>
+      <tr style="font-weight:700;">
+        <td colspan="2">စုစုပေါင်း</td>
+        <td id="p_st_prev_m"></td><td id="p_st_prev_f"></td><td id="p_st_prev_t"></td>
+        <td id="p_st_curr_m"></td><td id="p_st_curr_f"></td><td id="p_st_curr_t"></td>
+        <td id="p_st_in_m"></td><td id="p_st_in_f"></td><td id="p_st_in_t"></td>
+        <td id="p_st_out_m"></td><td id="p_st_out_f"></td><td id="p_st_out_t"></td>
+        <td>-</td>
+      </tr>
+    </tfoot>
+  </table>
+  <div class="p-footer-grid">
+    <table class="p-support-table">
+      <tr>
+        <td style="width:68%;">ပထမအကြိမ်ထောက်ပံ့ရရှိမှု(ပြီး/မပြီး)</td>
+        <td id="p_supStatus"></td>
+      </tr>
+      <tr>
+        <td>Project ရရှိဖူးပါက</td>
+        <td id="p_supProject"></td>
+      </tr>
+      <tr>
+        <td>အမည်နှင့်အလှူရှင်(သို့)အဖွဲ့အစည်းအမည်</td>
+        <td id="p_supDonor"></td>
+      </tr>
+      <tr>
+        <td>ရရှိသည့် အထောက်အပံ့အမျိုးအစားနှင့် ထောက်ပံ့မှုကာလ</td>
+        <td id="p_supType"></td>
+      </tr>
+    </table>
+    <div class="p-sign-box">
+      <div class="p-sign-row"><div class="p-sign-lbl">လက်မှတ် -</div><div class="p-sign-val"></div></div>
+      <div class="p-sign-row"><div class="p-sign-lbl">အမည် -</div><div class="p-sign-val" id="p_signName"></div></div>
+      <div class="p-sign-row"><div class="p-sign-lbl">တာဝန် -</div><div class="p-sign-val" id="p_signRole">School Administrator</div></div>
+      <div class="p-sign-row"><div class="p-sign-lbl">ကျောင်း -</div><div class="p-sign-val" id="p_signSchool" style="font-size:8.5pt;"></div></div>
+    </div>
+  </div>
+  <div class="p-note">
+    <strong>မှတ်ချက်။</strong> &nbsp;။ <span id="p_customFooterNote"></span>
+  </div>
+</div>
+
+<div id="print-library-sheet">
+  <div class="demo-watermark" id="wm-library">DEMO VERSION</div>
+  <div class="lib-title-block">
+    စာကြည့်တိုက်အမည်-<span id="p_libName"></span><br>
+    လအမည်-<span id="p_libMonth"></span>
+  </div>
+  <table class="lib-table">
+    <thead>
+      <tr>
+        <th rowspan="2" style="width:4%;">စဉ်</th>
+        <th rowspan="2" style="width:24%;">အကြောင်းအရာ</th>
+        <th rowspan="2" style="width:7%;">အရေအတွက်</th>
+        <th colspan="3">၁၈နှစ်အောက်(including CwD)</th>
+        <th colspan="3">၁၈နှစ်အထက်(including CwD)</th>
+        <th colspan="3">( CwDမသန်စွမ်းသီးသန့်)<br>၁၈နှစ်အောက်</th>
+        <th colspan="3">( CwDမသန်စွမ်းသီးသန့်)<br>၁၈နှစ်အထက်</th>
+      </tr>
+      <tr>
+        <th style="width:4.5%;">ကျား</th><th style="width:4.5%;">မ</th><th style="width:5%;">ပေါင်း</th>
+        <th style="width:4.5%;">ကျား</th><th style="width:4.5%;">မ</th><th style="width:5%;">ပေါင်း</th>
+        <th style="width:4.5%;">ကျား</th><th style="width:4.5%;">မ</th><th style="width:5%;">ပေါင်း</th>
+        <th style="width:4.5%;">ကျား</th><th style="width:4.5%;">မ</th><th style="width:5%;">ပေါင်း</th>
+      </tr>
+    </thead>
+    <tbody id="p_lib_tbody"></tbody>
+  </table>
+</div>
+
+<script>
+  let activeTab = "school";
+  let isProLicensed = false;
+
+  const GRADES = [
+    "KG", "Grade - 1", "Grade - 2", "Grade - 3", "Grade - 4",
+    "Grade - 5", "Grade - 6", "Grade - 7", "Grade - 8", "Grade - 9",
+    "Grade - 10", "Grade - 11", "Grade - 12"
+  ];
+
+  const LIB_DEMO_ROWS = [
+    { id: 1, title: "စာကြည့်တိုက်အသုံးပြုသူ အသစ် အရေအတွက်", dashZero: true },
+    { id: 2, title: "စာကြည့်တိုက်အသုံးပြုသူ/စာဖတ်သူ အရေအတွက်" },
+    { id: 3, title: "စာအုပ်ငှားသူအရေအတွက်" },
+    { id: 5, title: "အသံထွက်စာဖတ်ခြင်း" },
+    { id: 6, title: "စုပေါင်းစာဖတ်ခြင်း" },
+    { id: 7, title: "နှစ်ယောက်တစ်တွဲစာဖတ်ခြင်း" },
+    { id: 8, title: "တစ်ဦးချင်းစာဖတ်ခြင်း" }
+  ];
+
+  const MYANMAR_DIGITS = ['၀','၁','၂','၃','၄','၅','၆','၇','၈','၉'];
+  function toMM(num) {
+    if (num === 0 || num === "0") return "-";
+    return String(num).replace(/[0-9]/g, d => MYANMAR_DIGITS[d]);
+  }
+
+  function computeLicenseKey(name) {
+    const clean = (name || "").trim().toLowerCase();
+    if (!clean) return "";
+    let h1 = 0x811c9dc5;
+    let h2 = 0x1b873593;
+    for (let i = 0; i < clean.length; i++) {
+      const c = clean.charCodeAt(i);
+      h1 ^= c;
+      h1 = Math.imul(h1, 0x01000193);
+      h2 ^= (c * 31);
+      h2 = Math.imul(h2, 0x85ebca6b);
+    }
+    const p1 = (h1 >>> 0).toString(16).toUpperCase().padStart(8, '0').slice(0, 4);
+    const p2 = (h2 >>> 0).toString(16).toUpperCase().padStart(8, '0').slice(0, 4);
+    return `MRP-${p1}-${p2}`;
+  }
+
+  function generateAdminKey() {
+    const name = document.getElementById("adminGenName").value;
+    if (!name.trim()) {
+      alert("ဝယ်ယူသူအမည် အရင်ရိုက်ထည့်ပါ။");
+      return;
+    }
+    const key = computeLicenseKey(name);
+    document.getElementById("adminGenOutput").innerText = `Generated Key: ${key}`;
+  }
+
+  function activateLicense() {
+    const name = document.getElementById("licClientName").value.trim();
+    const key = document.getElementById("licKeyInput").value.trim().toUpperCase();
+    if (!name || !key) {
+      alert("အမည်နှင့် လိုင်စင်ကုဒ် နှစ်ခုလုံး ထည့်သွင်းပါ။");
+      return;
+    }
+    if (key === computeLicenseKey(name)) {
+      isProLicensed = true;
+      localStorage.setItem("MRP_LICENSE_INFO", JSON.stringify({ name, key }));
+      updateLicenseUI();
+      alert("လိုင်စင် အတည်ပြုပြီးပါပြီ။ Full Version ကို စတင်အသုံးပြုနိုင်ပါပြီ။");
+    } else {
+      alert("လိုင်စင်ကုဒ် မှားယွင်းနေပါသည်။ အမည်နှင့် ကုဒ်ကို ပြန်လည်စစ်ဆေးပါ။");
+    }
+  }
+
+  function checkSavedLicense() {
+    try {
+      const saved = JSON.parse(localStorage.getItem("MRP_LICENSE_INFO") || "null");
+      if (saved && saved.name && saved.key === computeLicenseKey(saved.name)) {
+        isProLicensed = true;
+        document.getElementById("licClientName").value = saved.name;
+        document.getElementById("licKeyInput").value = saved.key;
+      }
+    } catch (e) {}
+    updateLicenseUI();
+  }
+
+  function updateLicenseUI() {
+    const badge = document.getElementById("licenseBadge");
+    const statusPill = document.getElementById("settingsLicenseStatus");
+    const banner = document.getElementById("demoBanner");
+    const wmSchool = document.getElementById("wm-school");
+    const wmLib = document.getElementById("wm-library");
+    const subtitle = document.getElementById("headerOrgSubtitle");
+
+    if (isProLicensed) {
+      const clientName = document.getElementById("licClientName").value.trim();
+      badge.innerText = "PRO LICENSED";
+      badge.className = "license-pill pill-pro";
+      statusPill.innerText = "ACTIVE (PRO)";
+      statusPill.className = "license-pill pill-pro";
+      banner.style.display = "none";
+      wmSchool.style.display = "none";
+      wmLib.style.display = "none";
+      subtitle.innerText = `Licensed to: ${clientName}`;
+    } else {
+      badge.innerText = "DEMO VERSION";
+      badge.className = "license-pill pill-demo";
+      statusPill.innerText = "DEMO";
+      statusPill.className = "license-pill pill-demo";
+      banner.style.display = "flex";
+      wmSchool.style.display = "block";
+      wmLib.style.display = "block";
+    }
+  }
+
+  function switchTab(tab) {
+    activeTab = tab;
+    ["school", "library", "settings"].forEach(t => {
+      document.getElementById(`tab-${t}`).classList.toggle("active", t === tab);
+      document.getElementById(`btn-tab-${t}`).classList.toggle("active", t === tab);
+    });
+
+    const topBtn = document.getElementById("topActionBtn");
+    const pdfBtn = document.getElementById("pdfBtnLabel");
+    const bottomBar = document.getElementById("bottomBar");
+
+    if (tab === "school") {
+      topBtn.innerText = "ယခင်လအတိုင်း ကူးမည်";
+      topBtn.style.display = "inline-flex";
+      pdfBtn.innerText = "📄 ကျောင်းလချုပ် PDF ထုတ်မည်";
+      bottomBar.style.display = "flex";
+    } else if (tab === "library") {
+      topBtn.innerText = "စာကြည့်တိုက် ဂဏန်းရှင်းမည်";
+      topBtn.style.display = "inline-flex";
+      pdfBtn.innerText = "📄 စာကြည့်တိုက်လချုပ် PDF ထုတ်မည်";
+      bottomBar.style.display = "flex";
+    } else {
+      topBtn.style.display = "none";
+      bottomBar.style.display = "none";
+    }
+  }
+
+  function handleTopAction() {
+    if (activeTab === "school") {
+      copyPrevToCurr();
+    } else if (activeTab === "library") {
+      if (!confirm("နောက်လအသစ်သွင်းရန် စာကြည့်တိုက် အရေအတွက်များကို 0 ပြန်ထားမည်လား?")) return;
+      LIB_DEMO_ROWS.forEach(r => {
+        ["u18m", "u18f", "o18m", "o18f", "cu18m", "cu18f", "co18m", "co18f"].forEach(k => {
+          document.getElementById(`lib_${r.id}_${k}`).value = 0;
+        });
+      });
+      document.getElementById("lib_r4_num").value = 0;
+      document.getElementById("lib_r4_txt").value = "";
+      recalcLibrary();
+    }
+  }
+
+  function initTables() {
+    const tbody = document.getElementById("student-tbody");
+    tbody.innerHTML = "";
+    GRADES.forEach((g, idx) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td style="text-align:left; font-weight:600; white-space:nowrap;">${g}</td>
+        <td><input type="number" min="0" id="pm_${idx}" value="0" oninput="recalcSchool()"></td>
+        <td><input type="number" min="0" id="pf_${idx}" value="0" oninput="recalcSchool()"></td>
+        <td class="calc-val" id="pt_${idx}">0</td>
+        <td><input type="number" min="0" id="cm_${idx}" value="0" oninput="recalcSchool()"></td>
+        <td><input type="number" min="0" id="cf_${idx}" value="0" oninput="recalcSchool()"></td>
+        <td class="calc-val" id="ct_${idx}">0</td>
+        <td class="diff-pos" id="in_${idx}">-</td>
+        <td class="diff-neg" id="out_${idx}">-</td>
+        <td><input type="text" id="note_${idx}" value="" placeholder="-" oninput="saveData()" style="min-width:80px;"></td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    const libTbody = document.getElementById("lib-grid-tbody");
+    libTbody.innerHTML = "";
+    LIB_DEMO_ROWS.forEach(r => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${r.id}</td>
+        <td style="text-align:left; font-weight:500;">${r.title}</td>
+        <td class="calc-val" id="lib_${r.id}_grand">0</td>
+        <td><input type="number" min="0" id="lib_${r.id}_u18m" value="0" oninput="recalcLibrary()"></td>
+        <td><input type="number" min="0" id="lib_${r.id}_u18f" value="0" oninput="recalcLibrary()"></td>
+        <td class="calc-val" id="lib_${r.id}_u18t">0</td>
+        <td><input type="number" min="0" id="lib_${r.id}_o18m" value="0" oninput="recalcLibrary()"></td>
+        <td><input type="number" min="0" id="lib_${r.id}_o18f" value="0" oninput="recalcLibrary()"></td>
+        <td class="calc-val" id="lib_${r.id}_o18t">0</td>
+        <td><input type="number" min="0" id="lib_${r.id}_cu18m" value="0" oninput="recalcLibrary()"></td>
+        <td><input type="number" min="0" id="lib_${r.id}_cu18f" value="0" oninput="recalcLibrary()"></td>
+        <td class="calc-val" id="lib_${r.id}_cu18t">0</td>
+        <td><input type="number" min="0" id="lib_${r.id}_co18m" value="0" oninput="recalcLibrary()"></td>
+        <td><input type="number" min="0" id="lib_${r.id}_co18f" value="0" oninput="recalcLibrary()"></td>
+        <td class="calc-val" id="lib_${r.id}_co18t">0</td>
+      `;
+      libTbody.appendChild(tr);
+    });
+  }
+
+  function loadSampleData() {
+    if (!confirm("နမူနာ အချက်အလက်များ ဖြည့်သွင်းမည်လား?")) return;
+    document.getElementById("schoolName").value = "နမူနာကိုယ်ပိုင်အထက်တန်းကျောင်း";
+    document.getElementById("villageName").value = "ရွာသစ်";
+    document.getElementById("t_cdm_m_high").value = 1;
+    document.getElementById("t_vol_m_pri").value = 2;
+    document.getElementById("t_vol_f_pri").value = 4;
+
+    const sampleStudents = [
+      [8, 7], [12, 10], [10, 11], [9, 12], [8, 10],
+      [7, 9], [11, 13], [6, 8], [7, 7], [5, 6],
+      [0, 0], [6, 5], [4, 4]
+    ];
+    sampleStudents.forEach((pair, idx) => {
+      document.getElementById(`pm_${idx}`).value = pair[0];
+      document.getElementById(`pf_${idx}`).value = pair[1];
+      document.getElementById(`cm_${idx}`).value = pair[0];
+      document.getElementById(`cf_${idx}`).value = pair[1];
+    });
+
+    document.getElementById("libName").value = "ပညာအလင်း စာကြည့်တိုက်";
+    document.getElementById("lib_2_u18m").value = 12;
+    document.getElementById("lib_2_u18f").value = 15;
+    document.getElementById("lib_3_u18m").value = 45;
+    document.getElementById("lib_3_u18f").value = 50;
+    document.getElementById("lib_r4_num").value = 95;
+    document.getElementById("lib_r4_txt").value = "အုပ်ရေ-၉၅";
+
+    recalcSchool();
+    recalcLibrary();
+    alert("နမူနာ အချက်အလက်များ ထည့်သွင်းပြီးပါပြီ။");
+  }
+
+  function copyPrevToCurr() {
+    if (!confirm("ယခင်လ ကျောင်းသားစာရင်းအတိုင်း ယခုလထဲသို့ ကူးယူမည်လား?")) return;
+    GRADES.forEach((_, idx) => {
+      document.getElementById(`cm_${idx}`).value = document.getElementById(`pm_${idx}`).value;
+      document.getElementById(`cf_${idx}`).value = document.getElementById(`pf_${idx}`).value;
+    });
+    recalcSchool();
+  }
+
+  function handleMonthChange() {
+    const months = ["ဇွန်", "ဇူလိုင်", "ဩဂုတ်", "စက်တင်ဘာ", "အောက်တိုဘာ", "နိုဝင်ဘာ", "ဒီဇင်ဘာ", "ဇန်နဝါရီ", "ဖေဖော်ဝါရီ", "မတ်"];
+    const sel = document.getElementById("reportMonth").value;
+    const idx = months.indexOf(sel);
+    document.getElementById("currMonthName").value = sel;
+    if (idx > 0) {
+      document.getElementById("prevMonthName").value = months[idx - 1];
+    }
+    saveData();
+  }
+
+  function getVal(id) {
+    return parseInt(document.getElementById(id).value) || 0;
+  }
+
+  function recalcSchool() {
+    const levels = ["pri", "mid", "high"];
+    let grandTeacherTotal = 0;
+
+    levels.forEach(lvl => {
+      const cdmM = getVal(`t_cdm_m_${lvl}`);
+      const volM = getVal(`t_vol_m_${lvl}`);
+      const totM = cdmM + volM;
+
+      const cdmF = getVal(`t_cdm_f_${lvl}`);
+      const volF = getVal(`t_vol_f_${lvl}`);
+      const totF = cdmF + volF;
+
+      const cdmS = cdmM + cdmF;
+      const volS = volM + volF;
+      const totS = totM + totF;
+
+      grandTeacherTotal += totS;
+
+      document.getElementById(`t_tot_m_${lvl}`).innerText = totM;
+      document.getElementById(`t_tot_f_${lvl}`).innerText = totF;
+      document.getElementById(`t_cdm_s_${lvl}`).innerText = cdmS;
+      document.getElementById(`t_vol_s_${lvl}`).innerText = volS;
+      document.getElementById(`t_tot_s_${lvl}`).innerText = totS;
+    });
+
+    document.getElementById("top-total-teachers").innerText = grandTeacherTotal;
+
+    let sumPM = 0, sumPF = 0, sumPT = 0;
+    let sumCM = 0, sumCF = 0, sumCT = 0;
+    let sumInT = 0, sumOutT = 0;
+
+    GRADES.forEach((_, idx) => {
+      const pm = getVal(`pm_${idx}`);
+      const pf = getVal(`pf_${idx}`);
+      const pt = pm + pf;
+
+      const cm = getVal(`cm_${idx}`);
+      const cf = getVal(`cf_${idx}`);
+      const ct = cm + cf;
+
+      const inM = cm > pm ? cm - pm : 0;
+      const inF = cf > pf ? cf - pf : 0;
+      const inT = inM + inF;
+
+      const outM = pm > cm ? pm - cm : 0;
+      const outF = pf > cf ? pf - cf : 0;
+      const outT = outM + outF;
+
+      document.getElementById(`pt_${idx}`).innerText = pt;
+      document.getElementById(`ct_${idx}`).innerText = ct;
+      document.getElementById(`in_${idx}`).innerText = inT > 0 ? `+${inT}` : "-";
+      document.getElementById(`out_${idx}`).innerText = outT > 0 ? `-${outT}` : "-";
+
+      sumPM += pm; sumPF += pf; sumPT += pt;
+      sumCM += cm; sumCF += cf; sumCT += ct;
+      sumInT += inT; sumOutT += outT;
+    });
+
+    document.getElementById("st_prev_m").innerText = sumPM;
+    document.getElementById("st_prev_f").innerText = sumPF;
+    document.getElementById("st_prev_t").innerText = sumPT;
+    document.getElementById("st_curr_m").innerText = sumCM;
+    document.getElementById("st_curr_f").innerText = sumCF;
+    document.getElementById("st_curr_t").innerText = sumCT;
+    document.getElementById("st_in_t").innerText = sumInT;
+    document.getElementById("st_out_t").innerText = sumOutT;
+
+    document.getElementById("top-total-students").innerText = sumCT;
+    const netDiff = sumCT - sumPT;
+    document.getElementById("top-diff-students").innerText = netDiff > 0 ? `+${netDiff}` : netDiff;
+
+    saveData();
+  }
+
+  function recalcLibrary() {
+    LIB_DEMO_ROWS.forEach(r => {
+      const u18t = getVal(`lib_${r.id}_u18m`) + getVal(`lib_${r.id}_u18f`);
+      const o18t = getVal(`lib_${r.id}_o18m`) + getVal(`lib_${r.id}_o18f`);
+      const cu18t = getVal(`lib_${r.id}_cu18m`) + getVal(`lib_${r.id}_cu18f`);
+      const co18t = getVal(`lib_${r.id}_co18m`) + getVal(`lib_${r.id}_co18f`);
+      const grand = u18t + o18t;
+
+      document.getElementById(`lib_${r.id}_u18t`).innerText = u18t;
+      document.getElementById(`lib_${r.id}_o18t`).innerText = o18t;
+      document.getElementById(`lib_${r.id}_cu18t`).innerText = cu18t;
+      document.getElementById(`lib_${r.id}_co18t`).innerText = co18t;
+      document.getElementById(`lib_${r.id}_grand`).innerText = grand;
+
+      if (r.id === 2) document.getElementById("lib-badge-users").innerText = grand;
+      if (r.id === 3) document.getElementById("lib-badge-borrowers").innerText = grand;
+    });
+
+    document.getElementById("lib-badge-books").innerText = getVal("lib_r4_num");
+    saveData();
+  }
+
+  function populateSchoolPrint() {
+    document.getElementById("p_customHeaderLines").innerText = document.getElementById("customHeaderLines").value;
+    document.getElementById("p_customFooterNote").innerText = document.getElementById("customFooterNote").value;
+
+    const textFields = [
+      "schoolName", "villageName", "acadYear", "reportMonth",
+      "orgName", "schoolLevel", "prevMonthName", "currMonthName",
+      "supStatus", "supProject", "supDonor", "supType",
+      "signName", "signRole", "signSchool"
+    ];
+
+    textFields.forEach(id => {
+      const el = document.getElementById(`p_${id}`);
+      if (el) el.innerText = document.getElementById(id).value;
+    });
+
+    const levels = ["pri", "mid", "high"];
+    levels.forEach(lvl => {
+      const cdmM = getVal(`t_cdm_m_${lvl}`);
+      const volM = getVal(`t_vol_m_${lvl}`);
+      const totM = cdmM + volM;
+
+      const cdmF = getVal(`t_cdm_f_${lvl}`);
+      const volF = getVal(`t_vol_f_${lvl}`);
+      const totF = cdmF + volF;
+
+      document.getElementById(`p_t_cdm_m_${lvl}`).innerText = toMM(cdmM);
+      document.getElementById(`p_t_vol_m_${lvl}`).innerText = toMM(volM);
+      document.getElementById(`p_t_tot_m_${lvl}`).innerText = toMM(totM);
+
+      document.getElementById(`p_t_cdm_f_${lvl}`).innerText = toMM(cdmF);
+      document.getElementById(`p_t_vol_f_${lvl}`).innerText = toMM(volF);
+      document.getElementById(`p_t_tot_f_${lvl}`).innerText = toMM(totF);
+
+      document.getElementById(`p_t_cdm_s_${lvl}`).innerText = toMM(cdmM + cdmF);
+      document.getElementById(`p_t_vol_s_${lvl}`).innerText = toMM(volM + volF);
+      document.getElementById(`p_t_tot_s_${lvl}`).innerText = toMM(totM + totF);
+    });
+
+    const pTbody = document.getElementById("p_student_tbody");
+    pTbody.innerHTML = "";
+
+    let sumPM = 0, sumPF = 0, sumPT = 0;
+    let sumCM = 0, sumCF = 0, sumCT = 0;
+    let sumInM = 0, sumInF = 0, sumInT = 0;
+    let sumOutM = 0, sumOutF = 0, sumOutT = 0;
+
+    GRADES.forEach((g, idx) => {
+      const pm = getVal(`pm_${idx}`);
+      const pf = getVal(`pf_${idx}`);
+      const pt = pm + pf;
+
+      const cm = getVal(`cm_${idx}`);
+      const cf = getVal(`cf_${idx}`);
+      const ct = cm + cf;
+
+      const inM = cm > pm ? cm - pm : 0;
+      const inF = cf > pf ? cf - pf : 0;
+      const inT = inM + inF;
+
+      const outM = pm > cm ? pm - cm : 0;
+      const outF = pf > cf ? pf - cf : 0;
+      const outT = outM + outF;
+
+      const note = document.getElementById(`note_${idx}`).value || "-";
+
+      sumPM += pm; sumPF += pf; sumPT += pt;
+      sumCM += cm; sumCF += cf; sumCT += ct;
+      sumInM += inM; sumInF += inF; sumInT += inT;
+      sumOutM += outM; sumOutF += outF; sumOutT += outT;
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${toMM(idx + 1)}</td>
+        <td style="text-align:left; padding-left:5px;">${g}</td>
+        <td>${toMM(pm)}</td><td>${toMM(pf)}</td><td><strong>${toMM(pt)}</strong></td>
+        <td>${toMM(cm)}</td><td>${toMM(cf)}</td><td><strong>${toMM(ct)}</strong></td>
+        <td>${toMM(inM)}</td><td>${toMM(inF)}</td><td>${toMM(inT)}</td>
+        <td>${toMM(outM)}</td><td>${toMM(outF)}</td><td>${toMM(outT)}</td>
+        <td>${note}</td>
+      `;
+      pTbody.appendChild(tr);
+    });
+
+    document.getElementById("p_st_prev_m").innerText = toMM(sumPM);
+    document.getElementById("p_st_prev_f").innerText = toMM(sumPF);
+    document.getElementById("p_st_prev_t").innerText = toMM(sumPT);
+
+    document.getElementById("p_st_curr_m").innerText = toMM(sumCM);
+    document.getElementById("p_st_curr_f").innerText = toMM(sumCF);
+    document.getElementById("p_st_curr_t").innerText = toMM(sumCT);
+
+    document.getElementById("p_st_in_m").innerText = toMM(sumInM);
+    document.getElementById("p_st_in_f").innerText = toMM(sumInF);
+    document.getElementById("p_st_in_t").innerText = toMM(sumInT);
+
+    document.getElementById("p_st_out_m").innerText = toMM(sumOutM);
+    document.getElementById("p_st_out_f").innerText = toMM(sumOutF);
+    document.getElementById("p_st_out_t").innerText = toMM(sumOutT);
+  }
+
+  function populateLibraryPrint() {
+    document.getElementById("p_libName").innerText = document.getElementById("libName").value;
+    document.getElementById("p_libMonth").innerText = document.getElementById("libMonth").value;
+
+    const pLibBody = document.getElementById("p_lib_tbody");
+    pLibBody.innerHTML = "";
+
+    const fmtCell = (v) => v > 0 ? v : "";
+
+    const buildDemoRow = (r) => {
+      const u18m = getVal(`lib_${r.id}_u18m`);
+      const u18f = getVal(`lib_${r.id}_u18f`);
+      const u18t = u18m + u18f;
+
+      const o18m = getVal(`lib_${r.id}_o18m`);
+      const o18f = getVal(`lib_${r.id}_o18f`);
+      const o18t = o18m + o18f;
+
+      const cu18m = getVal(`lib_${r.id}_cu18m`);
+      const cu18f = getVal(`lib_${r.id}_cu18f`);
+      const cu18t = cu18m + cu18f;
+
+      const co18m = getVal(`lib_${r.id}_co18m`);
+      const co18f = getVal(`lib_${r.id}_co18f`);
+      const co18t = co18m + co18f;
+
+      const grand = u18t + o18t;
+      const u18tDisp = u18t > 0 ? u18t : (r.dashZero ? "---" : "");
+
+      return `
+        <tr>
+          <td>${r.id}</td>
+          <td class="left-text">${r.title}</td>
+          <td><strong>${fmtCell(grand)}</strong></td>
+          <td>${fmtCell(u18m)}</td><td>${fmtCell(u18f)}</td><td>${u18tDisp}</td>
+          <td>${fmtCell(o18m)}</td><td>${fmtCell(o18f)}</td><td>${fmtCell(o18t)}</td>
+          <td>${fmtCell(cu18m)}</td><td>${fmtCell(cu18f)}</td><td>${fmtCell(cu18t)}</td>
+          <td>${fmtCell(co18m)}</td><td>${fmtCell(co18f)}</td><td>${fmtCell(co18t)}</td>
+        </tr>
+      `;
+    };
+
+    const buildTextRow = (num, title, countVal, descVal) => {
+      return `
+        <tr>
+          <td>${num}</td>
+          <td class="left-text">${title}</td>
+          <td>${countVal || "-"}</td>
+          <td colspan="12" class="left-text">${descVal || ""}</td>
+        </tr>
+      `;
+    };
+
+    [0, 1, 2].forEach(i => pLibBody.innerHTML += buildDemoRow(LIB_DEMO_ROWS[i]));
+    pLibBody.innerHTML += buildTextRow(4, "ငှားရမ်းသောစာအုပ်အရေအတွက်", document.getElementById("lib_r4_num").value, document.getElementById("lib_r4_txt").value);
+    [3, 4, 5, 6].forEach(i => pLibBody.innerHTML += buildDemoRow(LIB_DEMO_ROWS[i]));
+    pLibBody.innerHTML += buildTextRow(9, "အခြားသောစာကြည့်တိုက်လှုပ်ရှားမှုများ", document.getElementById("lib_r9_num").value, document.getElementById("lib_r9_txt").value);
+    pLibBody.innerHTML += buildTextRow(10, "project နှင့်ပတ်သတ်၍ တွေ့ဆုံဆွေးနွေးမှုများ/အစည်းအဝေးများ", document.getElementById("lib_r10_num").value, document.getElementById("lib_r10_txt").value);
+    pLibBody.innerHTML += buildTextRow(11, "စာကြည့်တိုက်လှုပ်ရှားမှု ရှိ/မရှိ(မရှိလျှင် ဘာကြောင့်ရေးရန်)", document.getElementById("lib_r11_num").value, document.getElementById("lib_r11_txt").value);
+    pLibBody.innerHTML += buildTextRow(12, "ပစ္စည်းရရှိမှု အမျိုးအစားနှင့် အရေအတွက်", document.getElementById("lib_r12_num").value, document.getElementById("lib_r12_txt").value);
+    pLibBody.innerHTML += buildTextRow(13, "ပစ္စည်းခွဲဝေပေးမှု", document.getElementById("lib_r13_num").value, document.getElementById("lib_r13_txt").value);
+  }
+
+  function generatePDF() {
+    const pageStyle = document.getElementById("dynamic-page-style");
+    if (activeTab === "school") {
+      pageStyle.innerHTML = "@page { size: A4 portrait; margin: 8mm 10mm; }";
+      document.body.className = "print-school";
+      populateSchoolPrint();
+    } else {
+      pageStyle.innerHTML = "@page { size: A4 landscape; margin: 10mm 10mm; }";
+      document.body.className = "print-library";
+      populateLibraryPrint();
+    }
+    window.print();
+  }
+
+  function saveData(showToast = false) {
+    const data = {};
+    document.querySelectorAll("input, select, textarea").forEach(el => {
+      if (el.id && !el.id.startsWith("adminGen")) data[el.id] = el.value;
+    });
+    localStorage.setItem("MRP_COMMERCIAL_APP_V1", JSON.stringify(data));
+    if (showToast) alert("အချက်အလက်များကို သိမ်းဆည်းပြီးပါပြီ။");
+  }
+
+  function loadData() {
+    const raw = localStorage.getItem("MRP_COMMERCIAL_APP_V1");
+    if (!raw) return;
+    try {
+      const data = JSON.parse(raw);
+      Object.keys(data).forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = data[id];
+      });
+    } catch (e) {}
+  }
+
+  function exportJSON() {
+    const raw = localStorage.getItem("MRP_COMMERCIAL_APP_V1") || "{}";
+    const blob = new Blob([raw], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    const m = activeTab === "school" ? document.getElementById("reportMonth").value : document.getElementById("libMonth").value;
+    a.download = `MonthlyReport_Backup_${m}.json`;
+    a.click();
+  }
+
+  function importJSON(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const data = JSON.parse(e.target.result);
+        localStorage.setItem("MRP_COMMERCIAL_APP_V1", JSON.stringify(data));
+        loadData();
+        recalcSchool();
+        recalcLibrary();
+        alert("Backup ဖိုင် ပြန်သွင်းပြီးပါပြီ။");
+      } catch (err) {
+        alert("ဖိုင်ပုံစံ မှားယွင်းနေပါသည်။");
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  function resetAllData() {
+    if (!confirm("စာရင်းအချက်အလက်အားလုံးကို ဖျက်ပြီး အသစ်ပြန်စမည်လား?")) return;
+    localStorage.removeItem("MRP_COMMERCIAL_APP_V1");
+    location.reload();
+  }
+
+  window.onload = () => {
+    initTables();
+    loadData();
+    checkSavedLicense();
+    recalcSchool();
+    recalcLibrary();
+  };
+</script>
 </body>
 </html>
