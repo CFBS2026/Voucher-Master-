@@ -24,13 +24,18 @@ jobs:
         with:
           accept-android-sdk-licenses: true
 
-      - name: Build APK
+      - name: Build Debug APK
         run: |
-          chmod +x ./gradlew
-          ./gradlew assembleDebug
+          if [ -f "./gradlew" ]; then
+            chmod +x ./gradlew
+            ./gradlew assembleDebug
+          else
+            echo "ERROR: ./gradlew not found in repository root."
+            exit 1
+          fi
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: MRP-Admin-Debug-APK
+          name: MRP-Admin-APK
           path: "**/*.apk"
